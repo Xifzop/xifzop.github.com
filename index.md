@@ -1,7 +1,7 @@
----
+﻿---
 layout: index
 title: lisblog
-author: tonie
+author: tonlog
 ---
 
 
