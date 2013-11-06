@@ -5,7 +5,7 @@ author: tonlog
 ---
 
 
-<h4>最新速递</h4>
+<h4>最近速递</h4>
 
 {% for post in site.posts limit: 5 %}
 + <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
