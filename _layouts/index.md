@@ -1,8 +1,6 @@
-﻿---
+---
 layout: default
 ---
-
-
 
 
 	<navig>
@@ -18,5 +16,6 @@ layout: default
 			<li><a href="{{ site.baseurl }}tag.html">标签</a><br/></li>
 		</ul>
 	</navig>
-	
-	{{ content }}
+
+
+		{{ content }}
