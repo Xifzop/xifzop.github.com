@@ -4,11 +4,11 @@ auto: true
 lsi: true
 tags: ['one', 'two']
 word: 'It is nevar put with the wrong end in front.'
-permalink: /lisblog/:categories/:title.lisb
+
 comments :
   provider : disqus
   disqus :
-    short_name : tonlog
+    short_name : xifzop
   livefyre :
     site_id : 123
   intensedebate :
