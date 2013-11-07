@@ -3,7 +3,7 @@ layout: index
 title: All LISblog
 author: tonie
 ---
-<a id="forkme_banner" href="/">Home Page</a>
+<a id="forkme_banner" href="#">Home Page</a>
 {% include div_left.textile %}
   <ul>
   {% for post in site.posts %}
