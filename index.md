@@ -8,10 +8,8 @@ author: tonie
 <h4>最新速递</h4>
 
 {% for post in site.posts limit: 5 %}
-+ <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
++ <a href="{{ post.url }}">{{ post.title }}</a>
   <label>{{ post.date | date_to_string }}</label>
-+ {{site.baseurl}}
-+ {{post.url}}
 
 {% endfor %}
 
