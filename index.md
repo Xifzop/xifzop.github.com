@@ -10,6 +10,9 @@ author: tonie
 {% for post in site.posts limit: 5 %}
 + <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
   <label>{{ post.date | date_to_string }}</label>
++ {{site.baseurl}}
++ {{post.url}}
+
 {% endfor %}
 
 {% for post in site.posts limit: 4 %}
