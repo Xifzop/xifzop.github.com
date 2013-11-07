@@ -1,15 +1,15 @@
----
+ï»¿---
 layout: default
 ---
 <navig>
 </ul>
-[±êÇ©]
+[æ ‡ç­¾]
 <ul class="posts">
 {% for tag in page.tags limit:3 %}
 <li><a href="/tag.html#{{tag}}">{{ tag }}</a></li>
 {% endfor %}
 </ul>
-[·ÖÀà]
+[åˆ†ç±»]
 <ul class="posts">{% for cat in page.categories limit:3 %}
 <li>{{ cat }}</li>
 {% endfor %}
@@ -21,20 +21,20 @@ layout: default
 </div>
 
 <div id="related">
-  <h3>Ïà¹ØÎÄÕÂ</h3>
+  <h3>ç›¸å…³æ–‡ç« </h3>
   <ul class="posts">
     {% if site.related_posts.size > 0 %}
     {% for post in site.related_posts limit:3 %}
       <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
     {% endfor %}
     {% else %}
-      ÔÝÊ±Ã»ÓÐ.
+      æš‚æ—¶æ²¡æœ‰.
     {% endif %}
   </ul>
 </div>
 
 <div>
-   <div id="disqus_thread"></div>
+<div id="disqus_thread"></div>
     <script type="text/javascript">
         /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
         var disqus_shortname = 'xifzop'; // required: replace example with your forum shortname
@@ -48,5 +48,4 @@ layout: default
     </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-</div>    
-    
+</div>
