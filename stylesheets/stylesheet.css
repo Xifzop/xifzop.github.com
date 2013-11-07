@@ -187,12 +187,10 @@ pre, code, navig {
 }
 
 navig {
-  float: right;
-  margin: -230px;
+
   margin-top: 100px;
   min-height: 100px;
   padding: 15px;
-  left: 200px;
   box-shadow: 0 0 10px rgba(0,0,0,.1);
   overflow: auto;
   width: 180px;
