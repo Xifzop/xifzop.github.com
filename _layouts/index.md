@@ -3,7 +3,7 @@ layout: default
 ---
 
 
-	{{ content }}
+
 
 	<navig>
 		<h4>Raven-404(LISblog):</h4>
@@ -18,3 +18,5 @@ layout: default
 			<li><a href="{{ site.baseurl }}tag.html">标签</a><br/></li>
 		</ul>
 	</navig>
+	
+	{{ content }}
