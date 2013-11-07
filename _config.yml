@@ -4,7 +4,6 @@ auto: true
 lsi: true
 tags: ['one', 'two']
 word: 'It is nevar put with the wrong end in front.'
-baseurl: xifzop.github.com/
 permalink: lisblog/:title.lisb
 
 
