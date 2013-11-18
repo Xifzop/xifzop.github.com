@@ -9,7 +9,7 @@ title: 在CAW中添加自动重启功能
 ***2:41 下午 星期一, 十一月 18, 2013***
 
 ***
-前一段搭建的简易Web App开发框架[CAW](围绕ruby)(详见另外一篇CAW框架的介绍)。
+前一段搭建的简易Web App开发框架[CAW](详见另外一篇CAW框架的介绍)。
 在使用CAW开发的过程中，由于对于client request路由，数据库配置，以及处理特定请求调用的处理方法这些都是在CAW中服务器启动一开始进行初始化的，所以在每次对于与这些相关的文件进行修改之后，总是要手动重启服务器，总让人觉得很麻烦，于是借着之前在开发别的项目的时候的服务器的使用经验，个人觉得说服务器应当能自动检测到配置或者初始化所需的注册文件的变化，并且进行相应的重启。当然，这只是第一阶段的想法，第二阶段希望能实现平滑地重新加载服务器最新的配置，也就是不让CAW中服务器进程终止的情况下，对CAW相应的模块进行部分重新加载，也就是“热加载”，有点类似JVM中动态加载类这样的任务，获得运行时带来的灵活性。这样的话，每次服务器总能反映出最新的配置变化，给开发能省省心。
 
 第一个版本自然是要从最简单的功能。
@@ -29,7 +29,7 @@ title: 在CAW中添加自动重启功能
 
 + 个人选择的MRI版本的ruby，而MRI版本的ruby一个比较大的问题在于，ruby使用的是伪线程（关于这个的讨论参见[concurrency-is-a-myth-in-ruby]。具体就是MRI实现的ruby中，实现的并不是真正意义上的多线程机制：
 	+ 在ruby-1.8版本下，是利用单个线程模拟多线程，在这种情况下，ruby意义上的多线程只对于不同线程间有io阻塞的任务线程而言，效果比较明显。而对于cpu计算密集型的线程则没有什么明显的效率提升，而且由于实际是单线程，所以对于multi-core的机器，基本发挥不出多线程应有的优势，而且对于这种情况下的多线程，反而不如单线程执行的效率高，因为还要考虑到ruby内部实现中为了模拟多线程的线程进行系统调度的代价。
-	+ 在ruby-1.9版本中，看起来是实现多线程了，但是实际上，ruby解释器中还存在着全局解释器锁([GIL],PYTHON解释器中也有类似的实现)。在运行多线程时，[GIL]成为一个瓶颈。GIL对于在同一解释器中的线程，进行线程安全的保护机制，所以在同一时间内只有一个线程能够执行，这对于单核是没有很大区别的，关键是现在进入了“多核时代”，所以对于ruby的MRI实现而言，即便在1.9版本中实现了多线程，但是由于GIL的缘故，多线程也无法发挥出很好的多线程多核优势。
+	+ 在ruby-1.9版本中，看起来是实现多线程了，但是实际上，ruby解释器中还存在着全局解释器锁[GIL]。同样，PYTHON解释器中也有类似的实现。在运行多线程时，[GIL]成为一个瓶颈。GIL对于在同一解释器中的线程，进行线程安全的保护机制，所以在同一时间内只有一个线程能够执行，这对于单核是没有很大区别的，关键是现在进入了“多核时代”，所以对于ruby的MRI实现而言，即便在1.9版本中实现了多线程，但是由于GIL的缘故，多线程也无法发挥出很好的多线程多核优势。
 	+ 2.0方面还没有研究。
 	+ 所幸的是，对于ruby的另外的实现，例如jruby以及rubinius中，对于真正意义上的多线程的是有保障的，jruby解释成jvm字节码，可以藉由JVM发挥出多核优势；而后者还没有研究。
 + 其次，就是windows下的多线程机制，多进程机制和Linux是有许多不同的，这也让我不太习惯，当然，完成这版windows的，linux就比较好办了。
@@ -59,7 +59,7 @@ fssm的monitor进程开始运行，服务器进程开始运行。关键在于如
 通过ruby进行进程间通信，这个监视部分文件系统并且通知服务器重新载入的new feature就完成了，已经添加到[CAW]的最新版本中去了。
 
 [CAW]: https://github.com/Xifzop/CAW "Web App Framework CAW"
-[concurrency-is-a-myth-in-ruby]: http://www.igvita.com/2008/11/13/concurrency-is-a-myth-in-ruby/
-[GIL] http://en.wikipedia.org/wiki/Global_Interpreter_Lock "Global Interpreter Lock"
+[concurrency-is-a-myth-in-ruby]: http://www.igvita.com/2008/11/13/concurrency-is-a-myth-in-ruby/ "Ig"
+[GIL]: http://en.wikipedia.org/wiki/Global_Interpreter_Lock "Global Interpreter Lock"
 [fssm]: https://github.com/ttilley/fssm "文件系统监控"
 [listen]: https://github.com/guard/listen "文件系统监控"
