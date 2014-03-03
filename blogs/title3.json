@@ -1,9 +1,0 @@
-{
-    "title"    : "Hello world!",
-    "content"  : "This is my first article.",
-    "date"     : {
-        "year" : 2015,
-        "month": 4,
-        "day"  : 5
-    }
-}
