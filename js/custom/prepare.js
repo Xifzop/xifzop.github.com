@@ -215,7 +215,7 @@ kit.init_fn = {
                                 for(var i = 0; i < posts.length; ++i) {
                                     var post_li = kit.node_util.new_node({tag:'li'});
                                     var post = posts[i];
-                                    var innerpost = post.children[0].children[0].children[0];
+                                    var innerpost = post.children[1].children[0].children[0];
                                     var title = innerpost.children[0];
                                     var content = innerpost.children[1];
                                     var title_div = kit.node_util.new_div({'class':'title_in_hidden'},title.innerHTML);
@@ -225,6 +225,8 @@ kit.init_fn = {
                                     post_li.appendChild(content_div);
                                     post_li.appendChild(kit.node_util.new_node({tag:'br'}));
                                     postslst.appendChild(post_li);
+
+
 
                                 }
 
@@ -346,10 +348,23 @@ kit.init_fn = {
 
         $.getJSON('profile/catalog.json', function(catalog) {
 
+
+
+            var dates = [];
             for (var date in catalog) {
-                var item = new_archive_item(date, catalog[date]);
-                $('#archive-lst')[0].appendChild(item);
+                dates.push(new Date(date));
             }
+            dates.sort(function(a,b){return b - a;});
+
+            dates.forEach(function(date) {
+                var date_str = kit.tool.date2str(date, 'yyyy-M-d');
+                var item = new_archive_item(
+                    date_str,
+                    catalog[date_str]
+                );
+                $('#archive-lst')[0].appendChild(item);
+            });
+
         });
 
     },
@@ -369,6 +384,11 @@ kit.tool = {
     dates : [],
     catalog : {},
     postlst : [],
+
+    date2str : function (x,y) {
+        var z ={y:x.getFullYear(),M:x.getMonth()+1,d:x.getDate(),h:x.getHours(),m:x.getMinutes(),s:x.getSeconds()};
+        return y.replace(/(y+|M+|d+|h+|m+|s+)/g,function(v) {return ((v.length>1?"0":"")+eval('z.'+v.slice(-1))).slice(-(v.length>2?v.length:2))});
+    },
 
     get_query_str: function() {
         var r = window.location.search.substr(1);
