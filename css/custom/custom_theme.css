@@ -35,7 +35,7 @@
      padding-left: 6px;
  }
 
- .archive-item {
+ .archive-item, .archive-item-date {
      list-style: none;
      color: #fff;
      padding-left: 10px;
@@ -51,4 +51,8 @@
  .title_in_hidden {
      font-size: 20px;
      padding-left: 20px;
+ }
+
+ .archive-item-date {
+     padding-left: 30px;
  }

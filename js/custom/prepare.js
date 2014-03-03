@@ -332,9 +332,25 @@ kit.init_fn = {
             postlst[0].clicked = true;
         });
 
-        alert(kit.tool.dates);
-        archive.append('sss');
+        var new_archive_item = function(date, item) {
 
+            var node = kit.node_util.new_div({'class':'archive-item'});
+            var icon = kit.node_util.new_node({tag:'i', 'class':'uk-icon-pencil-square'});
+            var link = kit.node_util.new_node({tag:'a', 'href':'.?action=get_post&param='+item}, item.substr(0,15));
+            node.appendChild(icon);
+            node.appendChild(document.createTextNode('  '));
+            node.appendChild(link);
+            node.appendChild(kit.node_util.new_node({tag:'span', 'class':'archive-item-date'}, date));
+            return node;
+        };
+
+        $.getJSON('profile/catalog.json', function(catalog) {
+
+            for (var date in catalog) {
+                var item = new_archive_item(date, catalog[date]);
+                $('#archive-lst')[0].appendChild(item);
+            }
+        });
 
     },
 
@@ -352,6 +368,7 @@ kit.tool = {
 
     dates : [],
     catalog : {},
+    postlst : [],
 
     get_query_str: function() {
         var r = window.location.search.substr(1);
