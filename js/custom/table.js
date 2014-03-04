@@ -2,15 +2,21 @@
  * Created by tonie on 2/28/14.
  */
 
+window.XTableRosters = {
+
+};
 
 window.XHandlers = {
 
-    "INPUT" : function(node)  {
+    "INPUT" : function(node, if_except_fn)  {
+
+        if ( if_except_fn(node) ) { return; }
+
         var value = node.value;
         var parentNode = node.parentNode;
         parentNode.innerHTML = '';
 
-        var div = this.new_div();
+        var div = document.createElement('div');
         div.innerHTML = value;
         parentNode.appendChild(div);
     },
@@ -46,21 +52,12 @@ window.XUtil = {
         return new_node;
     },
 
-    delete_table : function(root, table_id) {
-        var table = root.getElementById(table_id);
-        if ( table ) {
-            root.body.removeChild(table);
-            return true;
-        } else {
-            console.log('The table:', table_id, 'does not exist.');
-            return false;
-        }
-
-    },
-
-    patch : function(new_feature_name, new_feature) {
-        this[new_feature_name] = new_feature;
+    delete_table : function(root ,tid) {
+    	var table = root.getElementById(tid);
+    	root.body.removeChild(table);
+        delete window.XTableRosters[tid];
     }
+	
 };
 
 
@@ -68,7 +65,6 @@ window.XTable = function(table_info) {
 
     var table_obj = this;
     var table_util = window.XUtil;
-    this.self = this;
     this.caption = table_info['caption'];
     this.fields  = table_info['fields']? table_info['fields'] : [];
     this.rows = [];
@@ -76,6 +72,10 @@ window.XTable = function(table_info) {
 
     // init operation for actual elements.
     this.table_element = table_util.new_('table');
+
+    this.table_element.set({id:table_info['id']});
+    window.XTableRosters[table_info['id']] = this;
+
     this.field_elements = [];
     this.caption_element = this.caption? function(){
         var node = table_util.new_('caption');
@@ -153,7 +153,7 @@ window.XTable.prototype = {
     },
 
     insert_latest : function(record) {
-        this.insert_record(null, record);
+        this.insert_record( 0, record);
     },
 
     record_count : function() {
@@ -173,6 +173,7 @@ window.XTable.prototype = {
     },
 
     delete_row_at : function(index) {
+    	
         this.table_element.deleteRow(index+1);
         delete this.rows[index];
         delete this.row_elements[index];
@@ -215,9 +216,12 @@ window.XTable.prototype = {
     },
 
     foreach_cell_at_row : function(index, handler) {
-        this.row_elements[index].cells.forEach(function(row) {
-            row.cells.forEach(handler);
-        });
+
+        var cells = this.row_elements[index].cells;
+        for(var i = 0; i < cells.length; ++i) {
+            handler(cells[i]);
+        }
+
     },
 
     foreach_body_cell : function(handler) {
@@ -226,18 +230,8 @@ window.XTable.prototype = {
             this.foreach_cell_at_row(index, handler);
         }
 
-    },
-
-    add_new_row_btn : function(btn_name, default_msg) {
-        var button = XUtil.new_('button');
-        button.innerHTML = btn_name;
-        var that = this;
-        button.onclick = function() {
-            var record = that.self.new_record(default_msg);
-            that.insert_record(0, record);
-        };
-
-        return button;
     }
 
+
 };
+
