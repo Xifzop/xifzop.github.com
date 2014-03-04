@@ -336,6 +336,8 @@ kit.init_fn = {
 
         var new_archive_item = function(date, item) {
 
+            console.log(item);
+
             var node = kit.node_util.new_div({'class':'archive-item'});
             var icon = kit.node_util.new_node({tag:'i', 'class':'uk-icon-pencil-square'});
             var link = kit.node_util.new_node({tag:'a', 'href':'.?action=get_post&param='+item}, item.substr(0,15));
@@ -352,11 +354,16 @@ kit.init_fn = {
 
             var dates = [];
             for (var date in catalog) {
-                dates.push(new Date(date));
+                date_elements = date.split('-');
+                year = parseInt(date_elements[0]);
+                month = parseInt(date_elements[1]);
+                day = parseInt(date_elements[2]);
+                dates.push(new Date(year, month-1, day));
             }
             dates.sort(function(a,b){return b - a;});
 
             dates.forEach(function(date) {
+                console.log(date);
                 var date_str = kit.tool.date2str(date, 'yyyy-M-d');
                 var item = new_archive_item(
                     date_str,
