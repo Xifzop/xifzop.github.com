@@ -50,7 +50,7 @@ kit.node_util = {
             return false;
         }
 
-        var full_link = '?action=get_post&param=' + post_info.url;
+        var full_link = '?action=get_post&param=' + post_info.url + '#disqus_thread';
 
         var ppanel = this.new_div({
             'class' : 'm-post  m-post-txt'
@@ -335,9 +335,6 @@ kit.init_fn = {
         });
 
         var new_archive_item = function(date, item) {
-
-            console.log(item);
-
             var node = kit.node_util.new_div({'class':'archive-item'});
             var icon = kit.node_util.new_node({tag:'i', 'class':'uk-icon-pencil-square'});
             var link = kit.node_util.new_node({tag:'a', 'href':'.?action=get_post&param='+item}, item.substr(0,15));
@@ -363,7 +360,6 @@ kit.init_fn = {
             dates.sort(function(a,b){return b - a;});
 
             dates.forEach(function(date) {
-                console.log(date);
                 var date_str = kit.tool.date2str(date, 'yyyy-M-d');
                 var item = new_archive_item(
                     date_str,
@@ -484,6 +480,18 @@ kit.tool = {
                 // 2 directions
 
         var comment = kit.node_util.new_div({ 'class' : 'm-cmthot' });
+        comment.innerHTML = '<div id="disqus_thread"></div>' +
+            '<script type="text/javascript">' +
+            'var disqus_shortname = "xifzop";' +
+            '(function() {' +
+                'var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true;' +
+                'dsq.src = \'//\' + disqus_shortname + \'.disqus.com/embed.js\';' +
+                '(document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq);' +
+            '})();' +
+            '</script>' +
+            '<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>' +
+            '<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>';
+
 
         to.appendChild(postdtl);
         to.appendChild(pager);
