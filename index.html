@@ -20,6 +20,7 @@
         <link rel="shortcut icon" href="">
         <link rel="stylesheet" type="text/css" href="./css/ink-min.css">
         <link rel="stylesheet" type="text/css" href="./css/docs.css">  
+        <link rel='stylesheet' href='http://yandex.st/highlightjs/8.0/styles/default.min.css'>
 
         <style type="text/css">
             pre , code, kbd, samp { 
@@ -49,6 +50,7 @@
         <script type="text/javascript" src="./js/autoload.js"></script>
         <script type="text/javascript" src="./js/prettify.js"></script>
         <script type="text/javascript" src="./js/holder.js"></script>
+        <script src='http://yandex.st/highlightjs/8.0/highlight.min.js'></script>
 
     </head>
     <body onload="prettyPrint()" data-twttr-rendered="true">
@@ -119,7 +121,7 @@
                     </div>
                     <div class="large-20 medium-20 small-50 top-space">
                         <p style="margin-top:50px">
-                            <a class="" href="../OnDesignPattern/blogs/On_Creation.html">Some</a>
+                            <a class="" href="../OnDesignPattern/blogs/On_Creation.html#disqus_thread">Some</a>
                         </p>
                     </div>
                 </div>
@@ -129,6 +131,13 @@
         <div class="ink-grid">
             <section>
                 <div class="column-group horizontal-gutters">
+
+                    <a class="to_top" href="#">
+                        <div style="z-index:5; position:fixed; background-color:#fff; width:50px; height:50px; bottom:20px; left: 10px; opacity:0.4;filter:alpha(opacity=40); background-image: url(pics/back_to_top.png); background-repeat:no-repeat;">
+
+                        </div>
+                    </a>
+
                     <div id="content" class="large-100 medium-100 small-100">
                         
                     </div>
@@ -136,31 +145,6 @@
             </section>
         </div>      
         <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
-        <script>
-            var load_file = function() {
-                $.get(
-                    this.href, {},
-                    function( data, status ) {
-                        $('#content').html(data.substr(3485));
-                    }
-                );
-                return false;
-            };
-
-            $('a').click(function() {
-                if ( this.className == "" ) {
-                    load_file.call(this);
-                    return false;
-                } else {
-                    return true;    
-                }
-            });
-
-            // var links = document.getElementsByTagName("a");
-            // for ( var i in links ) {
-            //     links[i].onclick = onclick;
-            // }
-
-        </script>
+        <script type="text/javascript" src="js/init.js"></script>
     </body>
 </html>
