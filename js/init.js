@@ -120,4 +120,4 @@ $.getJSON('info/config.json', function(config){
     reg_link_action();
 });
 
-load_file(true, 'http://xifzop.github.io/info/preface.html');
+load_file(true, 'info/preface.html');
