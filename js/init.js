@@ -1,9 +1,26 @@
+
+var reg_link_action = function() {
+    $('a').click(function() {
+        if ( this.className == "" ) {
+            load_file.call(this);
+            return false;
+        } else if ( this.className == "nc" ) {
+            load_file.call(this, true);
+            return false;
+        } else {
+            return true;    
+        }
+    });
+};
+
 // invoked when each time the new url about md is clicked
-var load_file = function(no_comments) {
+var load_file = function(no_comments, href) {
                 $.get(
-                    this.href, {},
+                    href || this.href, {},
                     function( data, status ) {
                         var inner = data.substr(3485);
+                        $('#content').html(inner);
+
                         var dis   = $('#disqus');
                         if ( dis > 0 ) {
                             dis[0].parentNode.removeChild(dis);
@@ -44,10 +61,13 @@ var load_file = function(no_comments) {
                             a.innerHTML = "comments powered by <span class=\"logo-disqus\">Disqus</span>";
                             
                             $('#content').append(div);
+
                         }
                         
-                        $('#content').html(inner);       
-                        hljs.initHighlightingOnLoad();
+                        $('pre code').each(function(i, e) {
+                            hljs.highlightBlock(e);
+                        });
+                        reg_link_action();
                     }
                 );
                 return false;
@@ -59,11 +79,12 @@ var init_view = function(config) {
     MENU    = 0;
     PREFACE = 1;
     TITLE   = 0;
-        console.log('222');
+    WORDS   = 0;
+
     if( !config ) { return false; }
 
     var menu = config[MENU]['menu'];
-    console.log(menu);
+
     // for menu-1
     for ( var i = 0; i <menu.length; ++i ) {
         var item = document.createElement('li');
@@ -88,20 +109,15 @@ var init_view = function(config) {
         $('#menu2')[0].appendChild(item);        
     }    
 
+    var preface = config[PREFACE]['preface'];
+    $('#words').html(preface[WORDS]['words']);
+
+    return;
 };
 
 $.getJSON('info/config.json', function(config){
     init_view(config);
-
-    $('a').click(function() {
-        if ( this.className == "" ) {
-            load_file.call(this);
-            return false;
-        } else if ( this.className == "nc" ) {
-            load_file.call(this, true);
-            return false;
-        } else {
-            return true;    
-        }
-    });
+    reg_link_action();
 });
+
+load_file(true, 'http://xifzop.github.io/info/preface.html');

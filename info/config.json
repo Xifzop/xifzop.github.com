@@ -1,2 +1,2 @@
 [{"menu":[{"class":"logoPlaceholder push-left","href":"/","content":"Tony's Blog"},{"class":"latest","href":"#","content":"Latest"},{"class":"nc", "href":"info/about_me.html", "content":"About Me"},{"class":"git","href":"https://github.com/Xifzop","content":"Github"},
-{"class":"archive", "href":"","content" : "Archive"}]},{ "preface":[{"words":"Life is Beautiful."}]}]
+{"class":"nc", "href":"info/archive.html","content" : "Archive"}]},{ "preface":[{"words":"Cogito, ergo sum."}]}]

@@ -1,7 +1,5 @@
 import json
 
-
-
 CONFIG_FILE = 'config.json'
 
 class Formatter(object):
