@@ -148,10 +148,9 @@ body{font-size:16px;}
 </ul>
 <p>Bool（True与False）的操作围绕 &amp;&amp; || 还有 not组合。</p>
 <p>在Haskell编程中要求严格的操作符类型匹配，否则就会报错。例如，</p>
-<blockquote>
-<p>1 + "1"</p>
-</blockquote>
-<pre><code>interactive&gt;:12:1:
+<pre><code>ghci &gt; 1 + "1"
+
+interactive&gt;:12:1:
 
 No instance for (Num Char) arising from the literal `1'
 Possible fix: add an instance declaration for (Num Char)
@@ -162,17 +161,18 @@ In an equation for `it': it = 1 == '1'
 <p>其实在编程语言的语义分析以及程序正确性验证（并非一般所提及的测试，而是将程序的执行转化为定理证明，通过严密的数学逻辑进行推导）的过程当中，类型分析以及匹配是很关键的一块。这对于大部分非弱类型的语言来说，是很关键的。比如，利用Java编程的人总是在抱怨对于null的处理，很多别的编程语言中也是如此。在很多编程语言中空值或者空对象，总是被当作通用类型或者特殊值来处理。这简化了设计，但是也给程序正确性验证以及编译器进行类型推导、排错带来更大的难度。当然，也有编程语言采用另外一种设计思路，也就是迫使程序员在定义某一类型的同时，将该类型可能的形式进行一个枚举（比如nullType与非nullType），这样的话编译器在进行类型验证的过程当中就可以进行一个模式匹配，或者说类型定义的匹配，而程序员在处理某一类型的一般性代码时，编译器会要求程序员同时处理可能潜在的case。这样的程序正确性能够得到保证的同时，也利于错误的排查。但是目前的通用语言里面这样的不多，比如OCaml这一类的ML函数式编程语言。以及Haskell。</p>
 <p>一般通过let或者直接赋值的方式定义一个常量，没有给出类型提示时Haskell会自动进行类型推导。</p>
 <p>先看看递增函数succ。</p>
-<blockquote>
-<p>succ 2 # -&gt; 3</p>
-<p>min 2 3 # -&gt; 2</p>
-<p>max 2 3 # -&gt; 3</p>
-</blockquote>
+<pre><code>ghci &gt; succ 2 # -&gt; 3
+
+ghci &gt; min 2 3 # -&gt; 2
+
+ghci &gt; max 2 3 # -&gt; 3
+</code></pre>
 <p>Haskell中简单定义函数，
 函数名字(首字母不能大写，可以有')与函数体：</p>
-<blockquote>
-<p>doubleTimes x = x + x
-doubleTimes 2 # -&gt; 4</p>
-</blockquote>
+<pre><code>ghci &gt; doubleTimes x = x + x
+
+ghci &gt; doubleTimes 2 # -&gt; 4
+</code></pre>
 <p>也可以采用 if-then-else的结构。</p>
 <p>与许多函数式语言一样，为了对数据有统一性的结构化操作，在Haskell中通用数据类型是List ---- &lt;表&gt;.</p>
 <p>List的通用操作:</p>
@@ -195,76 +195,65 @@ element : list3
 <pre><code>[6,4,7,2,3,8] !! 3 # -&gt; 2
 </code></pre>
 <p>head返回一个List的头部，也就是List的首个元素。</p>
-<blockquote>
-<p>ghci&gt; head [5,4,3,2,1]<br />
-5</p>
-</blockquote>
+<pre><code>ghci &gt; head [5,4,3,2,1]
+
+5
+</code></pre>
 <p>tail返回一个LIst的尾部，也就是List除去头部之后的部分。</p>
-<blockquote>
-<p>ghci&gt; tail [5,4,3,2,1] <br />
-[4,3,2,1]  </p>
-</blockquote>
+<pre><code>ghci &gt; tail [5,4,3,2,1]   
+ghci &gt; [4,3,2,1]
+</code></pre>
 <p>last返回一个LIst的最后一个元素。</p>
-<blockquote>
-<p>ghci&gt; last [5,4,3,2,1] <br />
-1  </p>
-</blockquote>
+<pre><code>ghci &gt; last [5,4,3,2,1]   
+ghci &gt; 1
+</code></pre>
 <p>init返回一个LIst出去最后一个元素的部分。</p>
-<blockquote>
-<p>ghci&gt; init [5,4,3,2,1] <br />
-[5,4,3,2]  </p>
-</blockquote>
+<p>ghci &gt; init [5,4,3,2,1] <br />
+  ghci &gt;[5,4,3,2]  </p>
 <p>从空List需要谨慎。</p>
 <p>length返回一个List的长度。</p>
-<blockquote>
-<p>ghci&gt; length [5,4,3,2,1] <br />
-5 </p>
-</blockquote>
+<pre><code>ghci &gt; length [5,4,3,2,1]   
+ghci &gt; 5
+</code></pre>
 <p>null检查一个List是否为空。如果是，则返回True，否则返回False。应当避免使用xs==[]之类的语句来判断List是否为空，使用null会更好。</p>
-<blockquote>
-<p>ghci&gt; null [1,2,3] <br />
-False <br />
-ghci&gt; null [] <br />
-True </p>
-</blockquote>
+<pre><code>ghci &gt; null [1,2,3]   
+False   
+ghci &gt; null []   
+True
+</code></pre>
 <p>reverse将一个List反转</p>
-<blockquote>
-<p>ghci&gt; reverse [5,4,3,2,1] <br />
-[1,2,3,4,5] </p>
-</blockquote>
+<pre><code>ghci &gt; reverse [5,4,3,2,1]   
+[1,2,3,4,5]
+</code></pre>
 <p>take返回一个List的前几个元素，看：</p>
-<blockquote>
-<p>ghci&gt; take 3 [5,4,3,2,1] <br />
-[5,4,3] <br />
-ghci&gt; take 1 [3,9,3] <br />
-[3] <br />
-ghci&gt; take 5 [1,2] <br />
-[1,2]   </p>
-</blockquote>
+<pre><code>ghci &gt; take 3 [5,4,3,2,1]   
+[5,4,3]   
+ghci &gt; take 1 [3,9,3]   
+[3]   
+ghci &gt; take 5 [1,2]   
+[1,2]
+</code></pre>
 <p>drop和take作用类似，但是drop有点不一样，返回的是被删除之后的几个元素的列表。</p>
 <p>maximum返回一个List中最大的那个元素。miniimun返回最小的。</p>
-<blockquote>
-<p>ghci&gt; minimum [8,4,2,1,5,6] <br />
-1 <br />
-ghci&gt; maximum [1,9,2,3,4] <br />
-9</p>
-</blockquote>
+<pre><code>ghci &gt; minimum [8,4,2,1,5,6]   
+1   
+ghci &gt; maximum [1,9,2,3,4]   
+9
+</code></pre>
 <p>sum返回一个List中所有元素的和。product返回一个List中所有元素的积。</p>
-<blockquote>
-<p>ghci&gt; sum [5,2,1,6,3,2,5,7] <br />
-31 <br />
-ghci&gt; product [6,2,1,2] <br />
-24 <br />
-ghci&gt; product [1,2,5,6,7,9,2,0] <br />
-0  </p>
-</blockquote>
+<pre><code>ghci &gt; sum [5,2,1,6,3,2,5,7]   
+31   
+ghci &gt; product [6,2,1,2]   
+24   
+ghci &gt; product [1,2,5,6,7,9,2,0]   
+0
+</code></pre>
 <p>elem判断一个元素是否在包含于一个List，通常以中缀函数的形式调用它。</p>
-<blockquote>
-<p>ghci&gt; 4 `elem` [3,4,5,6] <br />
-True <br />
-ghci&gt; 10 `elem` [3,4,5,6] <br />
-False </p>
-</blockquote>
+<pre><code>ghci &gt; 4 \`elem\` [3,4,5,6]   
+True   
+ghci &gt; 10 \`elem\` [3,4,5,6]   
+False
+</code></pre>
 <p>List的Range功能。对于一个链表，需要的只是定义其</p>
 <blockquote>
 <p>[init, init + step_length ... last_val]</p>
@@ -273,19 +262,16 @@ False </p>
 <li>注意，在range中避免使用浮点数。</li>
 </ul>
 <p>同样，如果对于列表的末值不确定，可以采用无限列表。例如：</p>
-<blockquote>
-<p>[1,2 ...]
-take 100 [1,2 ...] # -&gt; [1,2,3,4........., 100]</p>
-</blockquote>
+<pre><code>[1,2 ...]
+take 100 [1,2 ...] # -&gt; [1,2,3,4........., 100]
+</code></pre>
 <p>这里就采用了惰性求值的模式，无限不意味着要求出来，可以确定性结果出来了在决定求值多少。</p>
 <p>cycle函数返回一个无限的单次循环List</p>
-<blockquote>
-<p>ghci&gt; take 10 (cycle [1,2,3]) <br />
-[1,2,3,1,2,3,1,2,3,1] </p>
-</blockquote>
+<pre><code>ghci &gt; take 10 (cycle [1,2,3])   
+[1,2,3,1,2,3,1,2,3,1]
+</code></pre>
 <p>repeat则是返回重复的无限列表。duplicate返回包含某个元素指定次数的列表。</p>
 <p>定义某个集合：</p>
-<blockquote>
-<p>[ 2 * x | x &lt;- [1,2..10], x * 2 &gt;= 12 ]</p>
-</blockquote>
+<pre><code>[ 2 * x | x &lt;- [1,2..10], x * 2 &gt;= 12 ]
+</code></pre>
 <p>元素值，列表，条件</p></body></html>
