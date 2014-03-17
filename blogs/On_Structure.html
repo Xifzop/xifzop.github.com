@@ -1,126 +1,5 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><style>html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+<h4>结构型模式</h4>
 
-body{
-  color:#444;
-  font-family:Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman',
-              "Hiragino Sans GB", "STXihei", "微软雅黑", serif;
-  font-size:12px;
-  line-height:1.5em;
-  background:#fefefe;
-  width: 45em;
-  margin: 10px auto;
-  padding: 1em;
-  outline: 1300px solid #FAFAFA;
-}
-
-a{ color: #0645ad; text-decoration:none;}
-a:visited{ color: #0b0080; }
-a:hover{ color: #06e; }
-a:active{ color:#faa700; }
-a:focus{ outline: thin dotted; }
-a:hover, a:active{ outline: 0; }
-
-span.backtick {
-  border:1px solid #EAEAEA;
-  border-radius:3px;
-  background:#F8F8F8;
-  padding:0 3px 0 3px;
-}
-
-::-moz-selection{background:rgba(255,255,0,0.3);color:#000}
-::selection{background:rgba(255,255,0,0.3);color:#000}
-
-a::-moz-selection{background:rgba(255,255,0,0.3);color:#0645ad}
-a::selection{background:rgba(255,255,0,0.3);color:#0645ad}
-
-p{
-margin:1em 0;
-}
-
-img{
-max-width:100%;
-}
-
-h1,h2,h3,h4,h5,h6{
-font-weight:normal;
-color:#111;
-line-height:1em;
-}
-h4,h5,h6{ font-weight: bold; }
-h1{ font-size:2.5em; }
-h2{ font-size:2em; border-bottom:1px solid silver; padding-bottom: 5px; }
-h3{ font-size:1.5em; }
-h4{ font-size:1.2em; }
-h5{ font-size:1em; }
-h6{ font-size:0.9em; }
-
-blockquote{
-color:#666666;
-margin:0;
-padding-left: 3em;
-border-left: 0.5em #EEE solid;
-}
-hr { display: block; height: 2px; border: 0; border-top: 1px solid #aaa;border-bottom: 1px solid #eee; margin: 1em 0; padding: 0; }
-
-
-pre , code, kbd, samp { 
-  color: #000; 
-  font-family: monospace; 
-  font-size: 0.88em; 
-  border-radius:3px;
-  background-color: #F8F8F8;
-  border: 1px solid #CCC; 
-}
-pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; padding: 5px 12px;}
-pre code { border: 0px !important; padding: 0;}
-code { padding: 0 3px 0 3px; }
-
-b, strong { font-weight: bold; }
-
-dfn { font-style: italic; }
-
-ins { background: #ff9; color: #000; text-decoration: none; }
-
-mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
-
-sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
-sup { top: -0.5em; }
-sub { bottom: -0.25em; }
-
-ul, ol { margin: 1em 0; padding: 0 0 0 2em; }
-li p:last-child { margin:0 }
-dd { margin: 0 0 0 2em; }
-
-img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
-
-table { border-collapse: collapse; border-spacing: 0; }
-td { vertical-align: top; }
-
-@media only screen and (min-width: 480px) {
-body{font-size:14px;}
-}
-
-@media only screen and (min-width: 768px) {
-body{font-size:16px;}
-}
-
-@media print {
-  * { background: transparent !important; color: black !important; filter:none !important; -ms-filter: none !important; }
-  body{font-size:12pt; max-width:100%; outline:none;}
-  a, a:visited { text-decoration: underline; }
-  hr { height: 1px; border:0; border-bottom:1px solid black; }
-  a[href]:after { content: " (" attr(href) ")"; }
-  abbr[title]:after { content: " (" attr(title) ")"; }
-  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }
-  pre, blockquote { border: 1px solid #999; padding-right: 1em; page-break-inside: avoid; }
-  tr, img { page-break-inside: avoid; }
-  img { max-width: 100% !important; }
-  @page :left { margin: 15mm 20mm 15mm 10mm; }
-  @page :right { margin: 15mm 10mm 15mm 20mm; }
-  p, h2, h3 { orphans: 3; widows: 3; }
-  h2, h3 { page-break-after: avoid; }
-}
-</style><title>On_Structure</title></head><body><h4 id="_1">结构型模式</h4>
 <ul>
 <li>适配器模式</li>
 <li>装饰者模式</li>
@@ -130,7 +9,9 @@ body{font-size:16px;}
 <li>组合模式</li>
 <li>享元模式</li>
 </ul>
+
 <p>如果说创建型模式关注于如何削弱对象创建与该对象参与的活动或者过程之间不必要的耦合，为对象的使用与对象的具体创建提供灵活的变化空间；那么结构型这一系列的模式，则是在讨论类与对象的结构型组织问题。类与类之间的结构无非可以分类为几种：继承形态，包含/聚合形态，调用形态。而对于不同的形态又可能带来不同的问题，对于不同的上下文，这一类的模式正是用来解决着一些问题的。当然还有很多别的结构型的设计模式，这里讨论最广为人知的这7种。</p>
+
 <pre><code>    从类与类的相互关系上看，不论是处于父子关系，还是包含与被包含的类而言，为了实现可维护性以及可扩展性，则类的设计必须依赖于接口而非具体的实现。人们在建立秩序的过程中，行为秩序的建立是很关键的一环。体现在软件设计中的，便是对于数据操作的一致性要求。从某种意义上说，数学之所以能成为人们生活中不可或缺或者强大的模型工具，就在于数学抓住了某些事物本质性的东西，对这些本质性进行数学化，摒除细节的同时，对事物的考察转换成为一致性的数学操作，这正属于抽象思维的一种，而这种一致性给人们带来了许多不可思议的发现，推动着社会的进步，也催生了计算机科学的兴起。
 
     计算机中的概念就派生于数学中的概念，数据以及对于数据的操作，甚至对于数据的操作的符号也能够被视为数据的一部分。要深入探索或者体会计算机世界中的林林总总，有时候就需要放下操作与操作对象之间的边界，有时候应当接受独立具体实现的逻辑层面的思维方式，把那些逻辑与控制相混淆的，或者操作符与值相对立的种种限定放在一边去思考。软件设计中的操作一致性要求在无处不在。在结构型模式中，由于从需求演化到设计的过程中，对于设计者而言总是一个痛苦的剥离过程，在设计的同时要做两件事：
@@ -145,42 +26,67 @@ body{font-size:16px;}
 
         这需要一个称之为适配的解决方案。也就是在许多情况下，两个交互的对象所有的行为描述可能不符合双方通信的需要，就需要定义一个统一的接口规格描述，这个作为双方调整接口使得相互的通信成为可能。接口在软件设计中可能是函数接口，也可能是某个通信协议。从这个角度出发，下面将从适配器模式开始，对结构型模式系列进行进一步的展开。
 </code></pre>
-<h5 id="adapter-pattern">Adapter Pattern</h5>
+
+<p>#####Adapter Pattern</p>
+
 <p>适配器模式，是当当前已有的一个类（可能是来源于遗留系统，或者来源于一个既有的库），可以满足当前的功能需求，唯一美中不足的是接口与系统所需调用的接口规格不一致。这个时候在不重复发明轮子， 且不对双方源代码进行修改的情况下，继承现有的类或者利用现有的类去完成满足系统接口规格的实现，不失为一个良策。适配器是为了解决接口规格的不一致而采取的措施。</p>
+
 <pre><code>    一般情况下，Adapter模式可以通过委托或者继承来达到实现目的。基于委托的适配可以提供更大的灵活性，而不必为继承而来的潜在耦合所带来的副作用所庸扰。
 </code></pre>
-<p>详见代码adapter_pattern.extend.py以及adapter_pattern.delegate.py.</p>
-<h5 id="decorator-pattern">Decorator Pattern</h5>
+
+<p>详见代码adapter<em>pattern.extend.py以及adapter</em>pattern.delegate.py.</p>
+
+<p>#####Decorator Pattern</p>
+
 <p>装饰者模式是一个在编程当中经常使用到的一个例子。一般在生活中对某事物稍加装饰，意味着在原有事物的基础上增添某些新的feature，而增添的过程中并不改变某事物的本质。这段话是极为抽象的，对于某个人，可能是让他穿上了冰刀鞋，从而使他拥有了在冰上滑翔的新的技能，但是对于其他方面，并没有变化。在这里，装饰意味从外部添加特征，而不对内修改。这很符合开闭原则，对于原有代码，为了降低各方面的成本，尽可能不去发生改动，而能接受需求或者扩展时系统的变化。</p>
+
 <p>因此对于装饰者模式而言，就我个人理解，意义在于，对于原有对象的扩展可以在编译或者解释前，以及动态环境中选择。前者是对于系统在尽量少修改源代码的情况下，完成对于新的功能的添加，这使得原有代码的维护成本降到了尽可能低，通常的做法是继承机制，也就是复用原对象的行为以及属性，并在此基础上完成扩展；如此说来，这样对于某些编译成本比较大的项目而言，往原有项目敷糖纸是远远优于重新编译，或者是增量编译的。而对于后者而言，在运行时期间，程序可能需要完成的是根据使用者的需要对程序进行定制，定制的可能的组合是不可预测的，当然也可以将所有可能的组合都先准备好，但是对于组合爆炸这样的curse，相信一般的开发者也不会蠢到去做这样的事情。因此，在运行时完成对目标对象的装饰行为，是一件听起来就很美妙的事情。</p>
+
 <p>在不同的编程语言中，对于装饰者模式的做法不尽相同。对于一些传统的面向对象语言而言，比如Java，需要通过增加修饰类，包裹原有的类，并在同等接口中实现装饰行为以及被包裹类的行为来实现。一般需要一颗继承树，装饰者类与被装饰者有着相同的行为，并且装饰者以被装饰者为成员对象，在实现接口的内部行为中实现装饰。</p>
+
 <p>在Python中，可以采用上述的方法，当然Python也采用了另外一种比较函数式的方式，Python中的Annotation作为装饰者，在复用性较好以及可理解性较好上做了比较好的trade-off。Python中的装饰者类有针对方法的，有针对类对象的。同时，其利用函数式编程的一些特性（闭包），可以实现诸如缓存或者惰性求值等等feature。装饰者可以说在Python的一些开源项目中还是有很广泛的应用的（动态性的优势）。</p>
+
 <p>而在另外一些编程语言中，装饰者也有其类似的替代方案。例如Ruby中的猴子补丁（Python也有，但是没有那么彻底）。Ruby中的补丁可以是对类对象的动态修改，这比装饰者的原意提供了更大的灵活性，是一把双刃剑（可能带来调试追踪的困难，或者状态/行为维护的不一致性），Ruby中可以将原有类的方法在动态环境中进行alias，而将原有的方法放入同名的新的方法定义中，完成装饰行为。</p>
+
 <pre><code>当然，装饰者带来不少好处的同时，也有一些需要注意的地方。例如，对于装饰者而言，现在许多面向对象语言都是通过内存自动回收机制进行内存管理的，而利用装饰者模式较为频繁的话，可能将会带来对象实例的生成碎片化，碎片实例都是为同一个对象行为或者系统例程中的同一逻辑服务的，而且装饰者还可能带来被忽略的递归深度的问题。另一方面，在装饰者数量较多的情形下，对于不同装饰者之间，装饰行为的状态依赖或者说行为的正交性，就需要考察。毕竟对于类的装饰在某些情况下先后顺序并不是确定的，这也不利于错误的排查。
 </code></pre>
-<h5 id="proxy-pattern">Proxy Pattern</h5>
+
+<p>#####Proxy Pattern</p>
+
 <p>代理模式，所谓的代理者是指一个类型可以作为其它东西的接口。代理者可以作任何东西的接口：网络连接、存储器中的大对象、文件或其它昂贵或无法复制的资源。</p>
+
 <p>说到代理模式，可能会与适配器模式与装饰者模式混淆。对于适配器模式处理的是对于目标接口不一致，从而需要完成模块或者函数对接时采取的常用策略。而装饰者模式是在运行时完成对类的feature的添加，而不改变被装饰类在其他模块或者引用处的接口。结构型模式往后看还有很多这样的思想。在不破坏结构的情况下，对类进行修改或者复用。而代理模式，通常被使用在: 对于某些对象的访问，或者使用上有着特殊需求的，例如安全性，灵活可扩展性以及缓存需要方面。</p>
+
 <p>代理模式的意图在于控制对被代理对象的访问，从而实现对访问操作的控制，比如在一些分布式的对象系统中，就需要某个存根，底层远程通信与调用机制，以及操作实际对象接口，这就是一个经典的代理模式。这么说太抽象了。</p>
+
 <p>代理模式的应用场景：</p>
+
 <ul>
 <li>远程代理（Remote Proxy ）</li>
 </ul>
+
 <blockquote>
-<p>这种场景下Proxy就类似于上面有提及的分布式环境下的一个存根。例如在Java RMI中，在调用端与被调用端需要有统一的操作接口，这就是代理模式中的操作接口，而对于具体实现而言，被调用端是真正实现了对象的操作。对于存根而言，其是一个控制代理，对于远程代理实际对象的细节都被封装起来了（对象注册寻址，序列化，中间件传输，反序列化，解析），这些不涉及具体类的实现的通信过程通过代理类而被屏蔽了，对于调用方而言，结构上还是统一的，但是对于对象的访问究竟是通过分布式的不同寻址方案，还是本机上的类的调用，这些都是被屏蔽的具体实现方式，这也使得访问对象的细节与调用的模块很好地完成了解耦。</p>
+  <p>这种场景下Proxy就类似于上面有提及的分布式环境下的一个存根。例如在Java RMI中，在调用端与被调用端需要有统一的操作接口，这就是代理模式中的操作接口，而对于具体实现而言，被调用端是真正实现了对象的操作。对于存根而言，其是一个控制代理，对于远程代理实际对象的细节都被封装起来了（对象注册寻址，序列化，中间件传输，反序列化，解析），这些不涉及具体类的实现的通信过程通过代理类而被屏蔽了，对于调用方而言，结构上还是统一的，但是对于对象的访问究竟是通过分布式的不同寻址方案，还是本机上的类的调用，这些都是被屏蔽的具体实现方式，这也使得访问对象的细节与调用的模块很好地完成了解耦。</p>
 </blockquote>
+
 <ul>
 <li>虚代理（Virtual Proxy ）：</li>
 </ul>
+
 <blockquote>
-<p>根据需要创建/回收开销很大的对象，或者对创建/回收进行管理（SmartPointer）。</p>
-<p>这样的做法是控制访问对象的操作过程中，较大开销部分的请求被重复地执行。作为全局变量的单例， 某些环境下也是出于类似的目的，被共享昂贵但是不被独占的资源。一个属于虚代理的例子，应该是内存管理模块，或者线程池。对于内存管理模块而言，请求方只关心自己请求资源，而不关心资源的来源以及去向。如果每次获取内存都要向OS发送一个分配内存的系统调用，那么开销是相对来说比较大的，有些内存管理模块是一口气申请一大块内存，然后通过模块内部进行切分以及管理，负责提供以及回收；回收的模块可能不是进行释放，而是与空闲的内存块进行合并或者是加入可用内存链表的末尾。而线程池，避免的是新建以及销毁线程的开销，重复利用申请而来的线程资源，通过代理行为，根据实际使用情况对线程池的大小进行动态调整，当然复杂性也上去了。代理模式也可结合享元模式进行申请资源的重复利用。享元模式在后面会提到。</p>
+  <p>根据需要创建/回收开销很大的对象，或者对创建/回收进行管理（SmartPointer）。</p>
+  
+  <p>这样的做法是控制访问对象的操作过程中，较大开销部分的请求被重复地执行。作为全局变量的单例， 某些环境下也是出于类似的目的，被共享昂贵但是不被独占的资源。一个属于虚代理的例子，应该是内存管理模块，或者线程池。对于内存管理模块而言，请求方只关心自己请求资源，而不关心资源的来源以及去向。如果每次获取内存都要向OS发送一个分配内存的系统调用，那么开销是相对来说比较大的，有些内存管理模块是一口气申请一大块内存，然后通过模块内部进行切分以及管理，负责提供以及回收；回收的模块可能不是进行释放，而是与空闲的内存块进行合并或者是加入可用内存链表的末尾。而线程池，避免的是新建以及销毁线程的开销，重复利用申请而来的线程资源，通过代理行为，根据实际使用情况对线程池的大小进行动态调整，当然复杂性也上去了。代理模式也可结合享元模式进行申请资源的重复利用。享元模式在后面会提到。</p>
 </blockquote>
+
 <ul>
 <li>保护代理（Protection Proxy ）：</li>
 </ul>
+
 <blockquote>
-<p>控制对原始对象的访问，用于对象应该有不同的访问权限。这类的代理通常是出于权限或者安全性的考虑。权限这里就不说了，对于安全性而言，访问该对象的时候，系统是否处于一个安全的时刻，死锁? 资源枯竭? 一致性保证? 输入的数据是否符合格式需求。对于一个实际对象进行操作前完成安全性地检查是必要的。这时候通过代理模式代理这些预处理行为不失为一个好的想法。</p>
+  <p>控制对原始对象的访问，用于对象应该有不同的访问权限。这类的代理通常是出于权限或者安全性的考虑。权限这里就不说了，对于安全性而言，访问该对象的时候，系统是否处于一个安全的时刻，死锁? 资源枯竭? 一致性保证? 输入的数据是否符合格式需求。对于一个实际对象进行操作前完成安全性地检查是必要的。这时候通过代理模式代理这些预处理行为不失为一个好的想法。</p>
 </blockquote>
-<h5 id="facade-pattern">Facade Pattern</h5>
-<p>门面模式</p></body></html>
+
+<p>#####Facade Pattern</p>
+
+<p>门面模式</p>

@@ -1,126 +1,5 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><style>html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+<h4>创建型模式</h4>
 
-body{
-  color:#444;
-  font-family:Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman',
-              "Hiragino Sans GB", "STXihei", "微软雅黑", serif;
-  font-size:12px;
-  line-height:1.5em;
-  background:#fefefe;
-  width: 45em;
-  margin: 10px auto;
-  padding: 1em;
-  outline: 1300px solid #FAFAFA;
-}
-
-a{ color: #0645ad; text-decoration:none;}
-a:visited{ color: #0b0080; }
-a:hover{ color: #06e; }
-a:active{ color:#faa700; }
-a:focus{ outline: thin dotted; }
-a:hover, a:active{ outline: 0; }
-
-span.backtick {
-  border:1px solid #EAEAEA;
-  border-radius:3px;
-  background:#F8F8F8;
-  padding:0 3px 0 3px;
-}
-
-::-moz-selection{background:rgba(255,255,0,0.3);color:#000}
-::selection{background:rgba(255,255,0,0.3);color:#000}
-
-a::-moz-selection{background:rgba(255,255,0,0.3);color:#0645ad}
-a::selection{background:rgba(255,255,0,0.3);color:#0645ad}
-
-p{
-margin:1em 0;
-}
-
-img{
-max-width:100%;
-}
-
-h1,h2,h3,h4,h5,h6{
-font-weight:normal;
-color:#111;
-line-height:1em;
-}
-h4,h5,h6{ font-weight: bold; }
-h1{ font-size:2.5em; }
-h2{ font-size:2em; border-bottom:1px solid silver; padding-bottom: 5px; }
-h3{ font-size:1.5em; }
-h4{ font-size:1.2em; }
-h5{ font-size:1em; }
-h6{ font-size:0.9em; }
-
-blockquote{
-color:#666666;
-margin:0;
-padding-left: 3em;
-border-left: 0.5em #EEE solid;
-}
-hr { display: block; height: 2px; border: 0; border-top: 1px solid #aaa;border-bottom: 1px solid #eee; margin: 1em 0; padding: 0; }
-
-
-pre , code, kbd, samp { 
-  color: #000; 
-  font-family: monospace; 
-  font-size: 0.88em; 
-  border-radius:3px;
-  background-color: #F8F8F8;
-  border: 1px solid #CCC; 
-}
-pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; padding: 5px 12px;}
-pre code { border: 0px !important; padding: 0;}
-code { padding: 0 3px 0 3px; }
-
-b, strong { font-weight: bold; }
-
-dfn { font-style: italic; }
-
-ins { background: #ff9; color: #000; text-decoration: none; }
-
-mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
-
-sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
-sup { top: -0.5em; }
-sub { bottom: -0.25em; }
-
-ul, ol { margin: 1em 0; padding: 0 0 0 2em; }
-li p:last-child { margin:0 }
-dd { margin: 0 0 0 2em; }
-
-img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
-
-table { border-collapse: collapse; border-spacing: 0; }
-td { vertical-align: top; }
-
-@media only screen and (min-width: 480px) {
-body{font-size:14px;}
-}
-
-@media only screen and (min-width: 768px) {
-body{font-size:16px;}
-}
-
-@media print {
-  * { background: transparent !important; color: black !important; filter:none !important; -ms-filter: none !important; }
-  body{font-size:12pt; max-width:100%; outline:none;}
-  a, a:visited { text-decoration: underline; }
-  hr { height: 1px; border:0; border-bottom:1px solid black; }
-  a[href]:after { content: " (" attr(href) ")"; }
-  abbr[title]:after { content: " (" attr(title) ")"; }
-  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }
-  pre, blockquote { border: 1px solid #999; padding-right: 1em; page-break-inside: avoid; }
-  tr, img { page-break-inside: avoid; }
-  img { max-width: 100% !important; }
-  @page :left { margin: 15mm 20mm 15mm 10mm; }
-  @page :right { margin: 15mm 10mm 15mm 20mm; }
-  p, h2, h3 { orphans: 3; widows: 3; }
-  h2, h3 { page-break-after: avoid; }
-}
-</style><title>On_Creation</title></head><body><h4 id="_1">创建型模式</h4>
 <ul>
 <li>工厂方法</li>
 <li>抽象工厂</li>
@@ -128,45 +7,55 @@ body{font-size:16px;}
 <li>建造者模式</li>
 <li>原型模式</li>
 </ul>
-<h5 id="factory-pattern">Factory Pattern</h5>
+
+<p>#####Factory Pattern</p>
+
 <p>某特工Agent培训机构需要培训一群特工，不同的Agent要做不同的任务，这里我们需要对Agent定义一个统一的do_task方法，对于不同的Agent，发送相应的任务信息，就知道应当做什么了。培训机构作为Agent的一个工厂，对于不同的Agent，可能其生成的过程中还需要不同的“预备训练”，在简单的例子中并没有给出来。</p>
+
 <ul>
-<li>
-<p>uni-factory
-        在进行设计的时候，对一类有着相同接口的对象进行创建时。一般通过传入的信息判断所需要的生成的实例类型。
-        适合对于同一抽象对象的不同子类的生成进行统一管理，包括不同的初始化预操作等等。
-        不足在于对于传入的参数，可能由于不存在对应的类型匹配而返回错误的对象或者null，在不少语言中的null类型或者空指针是让人很头疼的一个问题。解决方法有几种。这里通过另外专门定义一个null agent type完成一些对于不存在类型对象的默认类，DefaultAgent。</p>
+<li><p>uni-factory
+    在进行设计的时候，对一类有着相同接口的对象进行创建时。一般通过传入的信息判断所需要的生成的实例类型。
+    适合对于同一抽象对象的不同子类的生成进行统一管理，包括不同的初始化预操作等等。
+    不足在于对于传入的参数，可能由于不存在对应的类型匹配而返回错误的对象或者null，在不少语言中的null类型或者空指针是让人很头疼的一个问题。解决方法有几种。这里通过另外专门定义一个null agent type完成一些对于不存在类型对象的默认类，DefaultAgent。</p>
+
 <pre><code>*：( 这种做法源自于笔者在OCaml中，没有通用的null，而类型定义必须把可能的对应类型的空类型也定义出来的做法 )
-</code></pre>
-</li>
-<li>
-<p>multi-factory
-        对于uni-factory而言，可能传入的参数对象在工厂生成列表中并不存在，可以通过上面提到的专门设置null type的方法，也可以利用multi-factory，直接将可能生成的对象分为几个接口，通过不同的接口生成不同实例的对象，这样做避免了类似返回null这样的情形的出现。但是对于每次有新的Agent要进行拓展时，除了定义新的子类，同时也要在基类中添加对应的工厂方法. 当然，此时如果类的行为在结构框架上相似，那么完全可以用反射之类的机制完成动态地类生成以及方法添加，这些做法在某些具备反射机制的语言是可行的，但是反射在大多数语言之下将会带来效率上的损失，这属于非常规方法，多见于Ruby（method_missing）或者更加灵活元编程的语言。</p>
-</li>
-<li>
-<p>static-version..
-        与前两者相比，此类静态工厂方法不需要实例化，直接通过静态方法调用完成类工厂。这些对于那些面向对象(支持类以及静态类)而非基于原型（比如Javascript）是也是一种做法。</p>
+</code></pre></li>
+<li><p>multi-factory
+    对于uni-factory而言，可能传入的参数对象在工厂生成列表中并不存在，可以通过上面提到的专门设置null type的方法，也可以利用multi-factory，直接将可能生成的对象分为几个接口，通过不同的接口生成不同实例的对象，这样做避免了类似返回null这样的情形的出现。但是对于每次有新的Agent要进行拓展时，除了定义新的子类，同时也要在基类中添加对应的工厂方法. 当然，此时如果类的行为在结构框架上相似，那么完全可以用反射之类的机制完成动态地类生成以及方法添加，这些做法在某些具备反射机制的语言是可行的，但是反射在大多数语言之下将会带来效率上的损失，这属于非常规方法，多见于Ruby（method_missing）或者更加灵活元编程的语言。</p></li>
+<li><p>static-version..
+    与前两者相比，此类静态工厂方法不需要实例化，直接通过静态方法调用完成类工厂。这些对于那些面向对象(支持类以及静态类)而非基于原型（比如Javascript）是也是一种做法。</p>
+
 <pre><code>参见factory_pattern1.py与factory_pattern2.py.
-</code></pre>
-</li>
+</code></pre></li>
 </ul>
-<h5 id="abstract-factory-pattern">Abstract Factory Pattern</h5>
+
+<p>#####Abstract Factory Pattern</p>
+
 <p>这里沿用上面一个模式中Agent的例子。每个Agent需要配备一定的装备，基本的要求是武器Weapon以及防弹衣BodyArmor。这些是作为一个套装Kit分配给每个Agent的。但是对于不同的Agent，对于Wea/pon的需求是不一样的，作为KillerAgent而言，其主要任务是暗杀目标任务，也就是隐蔽在某处狙击目标或者通过消声器伪装的Weapon实行暗杀行动。这里以狙击枪SniperRifle为例。而BodyArmor，狙击手需要应对可能出现的危急情况，因为暗杀行为属于直接暴露身份的行为，因此对于BodyArmor的厚度以及强度也比较有要求。对于SpyAgent，在暴露身份前，BodyArmor以及Gun只是起到防身的作用。</p>
+
 <p>这样的情境下，沿用第一个Pattern，我们可以建造两个factory分别制造两类的装备，然而从可扩展性上而言，我们此时需要完成的是两类装备的制造，且两类装备对于不同的场合有着相对确定的两套组合( SniperRifle与EnhancedBodyArmor,  DesertEagle和NormalBodyArmor )，我们可以将这样的组合作为特定工厂的组合产品，提供一系列的行为进行生产，而不需每次创造装备时显式地指定。
 对于没有那么明确的组合系列，使用该模式有点多此一举了，完全可以两个工厂分别显式指定自由搭配，同时另一方面的不足在于增添单件装备是一件比较困难的事情，因为工厂是以装备套装主题为单位进行扩展的。而应对可能的新的装备组合，我们所需要做的便是添加新的工厂实现类，以及对应的新装备的实现类。</p>
+
 <pre><code>    具体看看代码，参见abstract_pattern.py.
 </code></pre>
-<h5 id="singleton-pattern">Singleton Pattern</h5>
+
+<p>#####Singleton Pattern</p>
+
 <p>单例模式是很常见的一种设计模式。然而其常见不代表其广泛的适用性，模式都是在特定情境下的解决方案。因此，对于单例模式，适用的场景可能有：</p>
+
 <ul>
 <li>一些对象在整个系统的生命周期中，频繁地被使用到，且这些对象进行初始化(分配到堆栈上)的开销代价较大，这将会使得系统耗费不必要的资源，采用单例易于管理；</li>
 <li>也是从可管理性的角度出发的，对于核心管理或者统计信息的类，如果有多个的话，那么在一般系统中，对于资源的分配，任务的分配以及数据或者状态的一致性方面，我们可能要在对象间的通信以及交互上，开销不菲，甚至吃力不讨好，那么通过统一对象进行集中式操作，会降低系统复杂度，易于调试与维护。</li>
 </ul>
+
 <p>对于单例或者是多例模式(变种)而言，使得程序中的某一类资源能够高效地被集中管理或者减少不必要的开销的时候，应当被提出作为眼下的解决方案，往往不失为一项良策。
 但是需要注意的是：单例作为系统内全局或者某一模块内的全局对象，其的出现扮演着共享对象的角色，而共享对象的作为多处代码的一部分，对其进行操作带来的副作用在某种程度上破坏了某块之间的相对独立性，以及封装。因而对于单例对象的管理以及决策要慎之又慎。</p>
+
 <p>由于装备被制造出来之后，是被机构内某一部门直接进行管理的，所以Agent根据各自什么进行装备领用的时候都要在该部门进行登记，该部门需要将登记的记录存储下来。特工机构的上层部门希望这个部门能集中管理，如何协调以后可能的同类部门间的信息共享放在以后解决。我们现在需要一个全局的WeaponDep进行记录，但是我们希望在整个机构系统内，Agent访问的都是同一个部门，而没有其他部门介入，从而对于装备的管理可以进行统一地协调。</p>
+
 <p>常见的单例：
 单例模式，创建这么一个作为全局变量的对象，单例的思想是很简单的。但是深入考察又不那么容易。作为全局或者区域共享的对象的，单例模式的应用场景有很多：对于单线程或者多线程，对于单例或者限制数量的有限个共享对象。单例中的实例对象的生成时刻的选择，也是依据不同系统的需求的。</p>
+
 <pre><code>    单例的生成分为载入时初始化以及惰性初始化。载入初始化可以分为静态初始化以及运行时载入，其中后者是对于有着虚拟执行环境（或者有堆这类允许动态内存分配机制）的语言而言才有意义的。一般而言，对于系统使用单例对象时机不确定的情境，可以采用惰性单例；而在系统生命周期的大部分时间都需要使用单例对象，或者单例对象的资源消耗较大的情境下（可能出现的问题在于在系统运行时降低长时段的性能），惰性载入则更受到欢迎。而单例的生成在不同的编程语言中又有各自的实现方式，例如对于Java而言，可以采用静态加载或者是两次锁的模式，后者是为了确保多线程环境下单例的唯一性。但是两者在序列化以及变成复杂性方面都会带来一些困难，因此在Java 5之后有着更被推荐的枚举实现单例的模式。详情自查吧~
 
     对于单线程而言，由于整个系统的控制流实际上是单一线性地执行，所以在这种情境下对于全局变量角色的访问，在某一时段内是确定的，不需要顾及许多并发访问出现的问题。对于线程安全的单例模式在不同的编程语言中有不同的多线程访问控制方式，常见的主要是两段锁机制以及enum(在Java)。 对于需要操纵多个实例生成的道理与单例一致，但是需要注意的是实例生成以及实例限制性检查应当由原子操作来保证操作过程的线程安全性。
@@ -175,8 +64,11 @@ body{font-size:16px;}
 
     参见singleton_pattern.*.py.
 </code></pre>
-<h5 id="builder-pattern">Builder Pattern</h5>
+
+<p>#####Builder Pattern</p>
+
 <p>建造者模式是一种对象构建模式，它可以将复杂对象的建造过程抽象出来（抽象类别），使这个抽象过程的不同实现方法可以构造出不同表现（属性）的对象。</p>
+
 <pre><code>    当创建复杂对象的步骤，独立于该对象的组成部分以及它们的装配方式时；或者，当构造过程必须允许被构造的对象有不同的表示时。这与前面提及的抽象工厂模式有着类似之处，首先二者都是以复杂对象为最终产物的。不同在于：抽象工厂生产的是以同一类主题而归类的对象（这样的归类方式比较泛，可以使满足某种语义的归类），抽象工厂下具体工厂决定了其生产的主题产品系列，产品在完成生产之后可以立即得到；而对于建造者模式，归类的系列子产品相对来说关联性更强一些——建造者模式中，有两类角色以及一类产品对象 &gt;&gt; Builder与Director。
 
     对于Builder而言，其定义了获得目标复杂产品的子物件的构建接口，使得构建与表示实现了分离。不同的Builder生产有着相同描述规格的子部件。而Director负责对Builder产生的子部件，按照一定的步骤完成拼装。这样很好地将子部件的创建与复杂产品的生产过程进行了解耦，子部件只要满足生产规格（接口中返回类型的规格定义）就可以交付于Director，完成复杂对象的拼装。这与现实生活中的工业化机械生产有着极其相似的地方。
@@ -185,8 +77,11 @@ body{font-size:16px;}
 
     参见builder_pattern.py.
 </code></pre>
-<h5 id="prototype-pattern">Prototype Pattern</h5>
+
+<p>#####Prototype Pattern</p>
+
 <p>原型模式是创建型模式的一种,其特点在于通过“复制”一个已经存在的实例来返回新的实例,而不是新建实例。被复制的实例就是我们所称的“原型”，这个原型是可定制的。</p>
+
 <pre><code>    原型模式多用于创建复杂的或者耗时的实例，因为这种情况下，复制一个已经存在的实例使程序运行更高效；或者创建值相等，只是命名不一样的同类数据。这样的情况在对于创建对象数目较大或者资源开销较大的情况下，而不去经常改变对象的内容时（以读为主）是一个不错的选择。原型是复用在同一块数据或者操作上的，当然这要和后面要提到的享元模式相区分开来。一个原型的例子来源于Javascript，作为一门非内建面向对象的编程语言，在Javascript中的主要对象是函数，同时新类的定义也是通过构造函数来完成的。在Javascript中，由于其灵活性，模拟面向对象的手法有很多种，从极简主义的形式到构造函数不一而足。而常见的构建面向对象的方式，正是通过类的构造函数对象的原型来定义的。在原型中定义在将来的类中的方法以及预定义的数据、常量等。这些使得Javascript中创建对象的代价由于类实例之间的公用而降低。而通过对原型的复制，来生成新的对象时，就不得不提及对象的浅复制和深复制。
 
     这边需要补充了解对象深、浅复制的概念：
@@ -194,4 +89,4 @@ body{font-size:16px;}
         深复制：将一个对象复制后，不论是基本数据类型还有引用类型，都是重新创建的。简单来说，就是深复制进行了完全彻底的复制，而浅复制不彻底。
 
     具体来看看代码，参见prototype_pattern.py.
-</code></pre></body></html>
+</code></pre>

@@ -1,0 +1,208 @@
+<p>###了解Gevent</p>
+
+<p>gevent是一个基于libev的并发框架，其为并发线程开发与网络编程提供许多挺有用的API. gevent中间比较核心的是采用了Greenlet。Greenlet是一种协成。传统的操作系统中为了完成通用的多任务调度，引入了进程以及线程的概念，前者是一个程序的运行时环境以及状态的总称，后者是cpu调度的最小单位，同时同处于一个进程内的多个线程共享所属进程的地址空间。然而在实现多任务的同时，由于不同的上下文环境需要切换，导致切换过程当中需要代价不菲（对上下文数据进行写入和写出）。从而使得多进程\多线程编程背着切换的包袱，在某些情况下甚至不如单线程执行。当然这不是说多任务并发这样不好，而且现在计算硬件都是多核，对多任务处理的程序进行执行的优化也没那么糟。</p>
+
+<p>在某些时候，对于多任务之间的协作，可能需要及时的数据交换或者状态切换，这些在内核级别的任务调度机制使得切换的开销难以被忽视。而现实是有多个进程协同完成的任务，切换的上下文甚至不需要那么多信息加以维护。协程这一概念最早出现在Simula与Modula-2中。协程是一种用户空间级别的调度单位。操作系统一般不介入协程的调度。</p>
+
+<p>现今，也有编程语言加入了对于协程的支持，C有轻量级的协程库，Golang也有goroutine，C#也有，而Python中通过yield完成协程的通信，以及有的管道实现。由于协程的用户空间级别的切换，所以理论上写成可以在自身任何语句位置“返回“，完成协程间的数据通信。因而对于只有一个入口与一个出口的子例程而言，“子例程是协程的特例“[Knuth曰]。对于多值返回，一些传统的编程语言并不支持，这时要么进行数据封装，返回数据结构体。然而对于数据先后计算时间差较大时，完成所有的计算量工作可能需要在函数体内部完成“同步”。可以用协程实现多次返回，例如在Python中的yield关键字，此次调用时执行的上下文是维持上一次的状态。例如：</p>
+
+<pre><code>#! /usr/bin/env python
+
+def my_range(i):
+    k = 0
+    while k &lt; i:
+        yield k
+        k += 1
+
+if __name__ == '__main__':
+
+    gen = my_range(100)
+
+    for j in gen:
+        if j == 50:
+        break
+
+    for k in gen:
+        print k
+</code></pre>
+
+<p>打印出的是51 .. 100.</p>
+
+<p>由于写成可以对等地调用别的协程，因而其执行顺序可能是不确定的，此时需要的是专门有一个moniter搜集其执行流程信息以跟踪。对于协程更深入的讨论以后会展开。</p>
+
+<p>好吧，这个话题栈有点深，让我们会到Greenlet ---- 虽然是属于Python的一个lib，但是其实际上是C扩展打包成的一个lib.由于协程是用户进程内部切换，因而可以将其实现视为跳转加上存有上下文信息的数据结构，跳转回某个协程就检查其栈并继续执行。因此，协程在同一个时间点是排他的。</p>
+
+<p>gevent的并发正是基于协程的，不过这里叫做greenlet，通过将一个大人物分解为多个子任务，并在同一个线程内被不断调度，更加快捷。这使得对于一些I/O为瓶颈的任务，会在适当时候被挂起或者切换至别的协程，更好地完成工作。</p>
+
+<p>上下文切换通过gevent.sleep(<length>)完成。
+采用gevent.Pool可以完成多线程的工作，并且返回确定性的结构。
+避免使用全局变量，以及运行时导入，带来可能的副作用我可不能负责。
+gevent.spawn生成的协程组可以被隐式地调度，采用gevent.joinall.</p>
+
+<p>Gevent中，如果某个greenlet运行失败，可以通过检查其状态进行诊断。</p>
+
+<blockquote>
+  <p>started() -- Boolean, 指示此Greenlet是否已经启动</p>
+  
+  <p>ready() -- Boolean, 指示此Greenlet是否已经停止</p>
+  
+  <p>successful() -- Boolean, 指示此Greenlet是否已经停止而且没抛异常</p>
+  
+  <p>value -- 任意值, 此Greenlet代码返回的值</p>
+  
+  <p>exception -- 异常, 此Greenlet内抛出的未捕获异常.</p>
+</blockquote>
+
+<p>主程序退出时，可能不能对一个greenlet进行后续的处理，从而导致僵尸进程。一个通用的处理模式就是在主程序中监听SIGQUIT信号，在程序退出调用gevent.shutdown。</p>
+
+<pre><code>import gevent
+import signal
+
+def run_forever():
+    gevent.sleep(1000)
+
+if __name__ == '__main__':
+    gevent.signal(signal.SIGQUIT, gevent.shutdown)
+    thread = gevent.spawn(run_forever)
+    thread.join()
+</code></pre>
+
+<p>对于超时机制，Gevent也提供了相应的支持：
+    超时是一种对一块代码或一个Greenlet的运行时间的约束。</p>
+
+<pre><code>import gevent
+from gevent import Timeout
+
+seconds = 10
+
+timeout = Timeout(seconds)
+timeout.start()
+
+def wait():
+    gevent.sleep(10)
+
+try:
+    gevent.spawn(wait).join()
+except Timeout:
+    print('Could not complete')
+</code></pre>
+
+<p>超时类也可以用在上下文管理器(context manager)中, 也就是with语句内。</p>
+
+<pre><code>import gevent
+from gevent import Timeout
+
+time_to_wait = 5 # seconds
+
+class TooLong(Exception):
+    pass
+
+with Timeout(time_to_wait, TooLong):
+    gevent.sleep(10)
+</code></pre>
+
+<p>另外，对各种Greenlet和数据结构相关的调用，gevent也提供了超时参数。 例如：</p>
+
+<pre><code>import gevent
+from gevent import Timeout
+
+def wait():
+    gevent.sleep(2)
+
+timer = Timeout(1).start()
+thread1 = gevent.spawn(wait)
+
+try:
+    thread1.join(timeout=timer)
+except Timeout:
+    print('Thread 1 timed out')
+
+# --
+timer = Timeout.start_new(1)
+thread2 = gevent.spawn(wait)
+
+try:
+    thread2.get(timeout=timer)
+except Timeout:
+    print('Thread 2 timed out')
+
+# --
+try:
+    gevent.with_timeout(1, wait)
+except Timeout:
+    print('Thread 3 timed out')
+</code></pre>
+
+<p>打印显示：</p>
+
+<blockquote>
+  <p>Thread 1 timed out
+  Thread 2 timed out
+  Thread 3 timed out</p>
+</blockquote>
+
+<p>Gevent也提供一部分的数据结构来实现异步通信。</p>
+
+<ul>
+<li><p>例如事件，gevent.event.Event以及gevent.event.AsyncResult.
+通过set与get完成异步通信。</p></li>
+<li><p>例如gevent.queue.Queue, 该队列提供阻塞或者非阻塞的操作，非阻塞不能完成时将抛出gevent.queue.Full或者Empty异常。</p></li>
+<li><p>例如gevent.pool.Group以及gevent.pool.Pool(继承自Group)，对并发进行组管理。</p></li>
+<li><p>gevent.coros.BoundedSemaphore </p></li>
+</ul>
+
+<blockquote>
+  <p></p>
+</blockquote>
+
+<pre><code>from gevent import sleep
+from gevent.pool import Pool
+from gevent.coros import BoundedSemaphore
+
+sem = BoundedSemaphore(2)
+
+def worker1(n):
+    sem.acquire()
+    print('Worker %i acquired semaphore' % n)
+    sleep(0)
+    sem.release()
+    print('Worker %i released semaphore' % n)
+
+def worker2(n):
+    with sem:
+        print('Worker %i acquired semaphore' % n)
+        sleep(0)
+    print('Worker %i released semaphore' % n)
+
+pool = Pool()
+pool.map(worker1, xrange(0,2))
+pool.map(worker2, xrange(3,6))
+</code></pre>
+
+<ul>
+<li>线程局部变量, Gevent也允许你指定局部于greenlet上下文的数据。 在内部，它被实现为以greenlet的getcurrent()为键， 在一个私有命名空间寻址的全局查找。</li>
+</ul>
+
+<p>&gt;
+    import gevent
+    from gevent.local import local
+    stash = local()</p>
+
+<pre><code>def f1():
+    stash.x = 1
+    print(stash.x)
+
+def f2():
+    stash.y = 2
+    print(stash.y)
+
+    try:
+        stash.x
+    except AttributeError:
+        print("x is not local to f2")
+
+g1 = gevent.spawn(f1)
+g2 = gevent.spawn(f2)
+
+gevent.joinall([g1, g2])
+</code></pre>
