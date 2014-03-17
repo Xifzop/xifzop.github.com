@@ -2,6 +2,9 @@
 
 <p>原文地址: <a href="http://http://morsmachine.dk/go-scheduler">http://http://morsmachine.dk/go-scheduler</a></p>
 
+<p>By Daniel Morsing
+翻译: Xifzop</p>
+
 <p>简介：</p>
 
 <blockquote>
@@ -49,3 +52,38 @@
 </ul>
 
 <p><img src="http://morsmachine.dk/in-motion.jpg" alt="example1" /></p>
+
+<p>如图，我们可以看到有两个线程（M），每个线程持有一个上下文（P），每个上下文中执行一个Goroutine（G）. 线程需要有上下文才能执行Goroutine。</p>
+
+<p>Context(P)的个数在初始化阶段被赋给了环境变量<strong>GOMAXPROCS</strong>. 或者可以通过运行时的函数<strong>GOMAXPROCS()</strong>进行设置。但是一般情况下这个变量的值在程序运行的全过程中是不会发生变化的。</p>
+
+<p>上下文P的数量固定意味着在一个时间点最多有指定数目个P在执行Golang的程序。我们可以利用这个将Go程序执行的任务分担到当前计算机支持的合理线程数，比如四核的就有四个线程。</p>
+
+<p>被上了灰色的Goroutine不在执行期间，但是处于就绪状态。它们被组织成一个个列表中，被称为运行队列（runqueue）。在Goroutine语句执行的时候，其余的Goroutine则被添加至runqueue末尾。当到达一个调度点的时候（到达某个调度条件），其便从队列中弹出一个Goroutine，设置栈以及指令指针，并且继续执行。</p>
+
+<p>为了避免互斥所的争用，每个Processor持有一个本地的runqueue。前一个版本的Golang只有一个全局的runqueue，并且通过一个mutex变量对其进行互斥加锁保护，这样一来在运行中线程往往被阻塞以等待资源锁的释放。这样一来，你若想在一个32核的机器上发挥出其应用的性能，那么只可能是个天方夜谭了。</p>
+
+<p>一般情况下，只要所有的Processor都处在调度忙的状态，调度器就能正常工作。当然也有些例外情况。</p>
+
+<p>#####你准备调用谁?</p>
+
+<p>你可能想知道，到底为什么需要Context(Processor)?我们直接把runqueue挂到线程上不就好了么? 不不不。有Context的原因是，如果某个线程由于某个原因而将被阻塞一段时间，那么可以将队列转接到别的processor上。</p>
+
+<p>阻塞情况的一个例子，就是我们在执行的过程当中需要完成一次系统调用。一个线程不能既等待系统调用，同时又执行代码。因此我们的做法是，将与系统调用相关的Goroutine交付给某个专门负责系统调用的线程，而Processor这边专门进行别的调度。如图：</p>
+
+<p><img src="http://morsmachine.dk/syscall.jpg" alt="example2" /></p>
+
+<p>图中我们可以看到，M0的线程放弃了context，而挂靠到M1线程上，由M0去等待完成G0的系统调用执行。调度器会保证有充足的线程提供给context。M1线程的来源，可能是为了系统调用不阻塞原先的context而被生成的，或者来自某个线程缓存中（Thread cache）。那个持有申请系统调用的goroutine的线程会继续维护那个goroutine。</p>
+
+<p>系统调用返回时，维护单个goroutine的线程会想方设法获得一个context的帮助，以继续运行那个goroutine，常见的模式是其从别的线程那儿“偷得”一个context。如果context获取的尝试失败，那么其会将goroutine挂到全局的runqueue上去，并且将自己挂靠到线程缓存尾部，并进入睡眠状态。</p>
+
+<p>这里提到的全局runqueue是当某个context执行完自己本地的runqueue（即runqueue为空时），才从全局runqueue获得goroutine，并且执行之。context也会周期性地check全局队列，以免队列中的goroutine被饿死。这也是为什么在GOMAXPROCS时仍然支持多线程。</p>
+
+<p>#####Stealing Work
+打破调度器以及系统稳定执行状态的另外一种情况是：当某个context执行完自己该执行的那部分goroutine时，特别是在多个context的runqueue上挂载的任务数或者任务执行耗时不一致时，此时会产生资源的浪费，（有活不干）。为了提高潜在执行效率，执行完本地任务的goroutine，会去执行全局的runqueue，还没有的话就去执行其他context的任务。</p>
+
+<p><img src="http://morsmachine.dk/steal.jpg" alt="example3" /></p>
+
+<p>当一个context执行完本地任务之后，其会从另一个context中获得1/2的执行任务，以此保证执行资源的相对均衡分配。</p>
+
+<p>当然关于调度器，我们还有很多细节没有提及，比如cgo线程，LockOSThread()函数体，以及与Network Poller的集成。这些不属于本篇的内容，但是仍然很值得学习。相关的会有后续更新。在Golang的库中有趣构建模式还有很多，等待你去发现。</p>
