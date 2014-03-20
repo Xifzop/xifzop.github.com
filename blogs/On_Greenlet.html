@@ -1,0 +1,50 @@
+<p>###关于Greenlet的一点笔记</p>
+
+<p>greenlet是独立的微线程，可以看做是一个栈帧，栈底是初始调用，栈顶是当前位置。由于一个greenlet并不是直接对应一个OS线程，因而对于greenlet，可以实现为但单个线程内的不同控制流的跳转，单个线程执行流是线性的，而通过不同的greenlet上下文的切换，使得在单个线程内完成了开销极小的多控制流切换（switch）执行。</p>
+
+<p>创建一个greenlet，是初始化一个堆栈，栈顶指针不断向栈底指针靠近，当栈为空时，则greenlet的生命周期终结。</p>
+
+<p>由于greenlet在进行初始化以及执行的过程中，其需要一个父greenlet进行挂靠。当任何一个子greenlet执行完毕之后，控制流的执行权又返回到父greenlet，而顶级环境一般是作为根greenlet。</p>
+
+<p>Greenlet可以与Python的线程合用，但是线程间不共享各自的greenlet树。</p>
+
+<p>如果不再有对greenlet对象的引用时(包括其他greenlet的parent)，还是没有办法切换回greenlet。这种情况下会生成一个 GreenletExit 异常到greenlet。这是greenlet收到异步异常的唯一情况。应该给出一个 try .. finally 用于清理greenlet内的资源。这个功能同时允许greenlet中无限循环的编程风格。这样循环可以在最后一个引用消失时自动中断。</p>
+
+<p>如果不希望greenlet死掉或者把引用放到别处，只需要捕捉和忽略 GreenletExit 异常即可。</p>
+
+<p>greenlet不参与垃圾收集；greenlet帧的循环引用数据会被检测到。将引用传递到其他的循环greenlet会引起内存泄露。</p>
+
+<p>我们也可以自己定义类继承greenlet。</p>
+
+<pre><code>#! /usr/bin/env python 
+
+from greenlet import greenlet
+class Mediator(greenlet):
+    def __init__(self, action):
+        super(Mediator, self).__init__(action)
+        self.action = action
+
+    def run(self, *args):
+        self.action(*args)
+
+def test1(*args, **kwargs):
+    print args
+    s = gr2.switch('hello', 'world', 'from 1')      # switch first and wait..
+    print s
+    print '1'
+    raise greenlet.GreenletExit()       
+    # in order not to spread the exception to super-greenlet
+
+
+def test2(*args, **kwargs):
+    print args
+    s = gr1.switch('hello', 'world', 'from 2')
+    print 'not executed here'
+
+if __name__ == '__main__':
+    gr1=Mediator(test1)
+    gr2=Mediator(test2)
+    gr1.switch('Hello', 'World', 'from super')
+</code></pre>
+
+<p>利用这种模式，应对高并发（有I/O阻塞的需要结合gevent等库），或者状态机还是蛮可行。Greenlet的优势在于将控制流压缩到用户空间的单个线程内完成调度行为，使得调度策略可以定制，同时降低了线程之间切换以及同步带来的开销，也降低了由于原先异步回调或者并发过程中由于隐式的线程调度带来的结果的不确定性（例如线程安全性等等）。另一方面，与OS线程消耗的线程相比，greenlet的开销轻如鸿毛，这在某些情况下是很棒的。然后却没有办法很好地利用多核机器的多线程执行优化，确实是比较可惜的，然而greenlet配合Python多进程体现出来的强大优势使得我也挺看好的。（关于在用户空间实现自制调度的还有一个例子，那就是Golang，Goroutine也是一种用户空间的类协程机制，二者还有区别，例如Golang用到了M:N的线程模型，解放了多核的优势）。Python的多线程是系统级的线程，结合greenlet也能有所发挥，但是对于Python的多线程，Python的解释执行环境内部却有着另外一套规则。以后还有一篇带来将关于Python全局解释器锁GIL的笔记，与Python解释器执行的性能有关。</p>
