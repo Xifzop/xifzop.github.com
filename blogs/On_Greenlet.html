@@ -1,22 +1,135 @@
-<p>###关于Greenlet的一点笔记</p>
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
 
+body{
+  color:#444;
+  font-family:Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman',
+              "Hiragino Sans GB", "STXihei", "微软雅黑", serif;
+  font-size:12px;
+  line-height:1.5em;
+  background:#fefefe;
+  width: 45em;
+  margin: 10px auto;
+  padding: 1em;
+  outline: 1300px solid #FAFAFA;
+}
+
+a{ color: #0645ad; text-decoration:none;}
+a:visited{ color: #0b0080; }
+a:hover{ color: #06e; }
+a:active{ color:#faa700; }
+a:focus{ outline: thin dotted; }
+a:hover, a:active{ outline: 0; }
+
+span.backtick {
+  border:1px solid #EAEAEA;
+  border-radius:3px;
+  background:#F8F8F8;
+  padding:0 3px 0 3px;
+}
+
+::-moz-selection{background:rgba(255,255,0,0.3);color:#000}
+::selection{background:rgba(255,255,0,0.3);color:#000}
+
+a::-moz-selection{background:rgba(255,255,0,0.3);color:#0645ad}
+a::selection{background:rgba(255,255,0,0.3);color:#0645ad}
+
+p{
+margin:1em 0;
+}
+
+img{
+max-width:100%;
+}
+
+h1,h2,h3,h4,h5,h6{
+font-weight:normal;
+color:#111;
+line-height:1em;
+}
+h4,h5,h6{ font-weight: bold; }
+h1{ font-size:2.5em; }
+h2{ font-size:2em; border-bottom:1px solid silver; padding-bottom: 5px; }
+h3{ font-size:1.5em; }
+h4{ font-size:1.2em; }
+h5{ font-size:1em; }
+h6{ font-size:0.9em; }
+
+blockquote{
+color:#666666;
+margin:0;
+padding-left: 3em;
+border-left: 0.5em #EEE solid;
+}
+hr { display: block; height: 2px; border: 0; border-top: 1px solid #aaa;border-bottom: 1px solid #eee; margin: 1em 0; padding: 0; }
+
+
+pre , code, kbd, samp { 
+  color: #000; 
+  font-family: monospace; 
+  font-size: 0.88em; 
+  border-radius:3px;
+  background-color: #F8F8F8;
+  border: 1px solid #CCC; 
+}
+pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; padding: 5px 12px;}
+pre code { border: 0px !important; padding: 0;}
+code { padding: 0 3px 0 3px; }
+
+b, strong { font-weight: bold; }
+
+dfn { font-style: italic; }
+
+ins { background: #ff9; color: #000; text-decoration: none; }
+
+mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
+
+sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+ul, ol { margin: 1em 0; padding: 0 0 0 2em; }
+li p:last-child { margin:0 }
+dd { margin: 0 0 0 2em; }
+
+img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
+
+table { border-collapse: collapse; border-spacing: 0; }
+td { vertical-align: top; }
+
+@media only screen and (min-width: 480px) {
+body{font-size:14px;}
+}
+
+@media only screen and (min-width: 768px) {
+body{font-size:16px;}
+}
+
+@media print {
+  * { background: transparent !important; color: black !important; filter:none !important; -ms-filter: none !important; }
+  body{font-size:12pt; max-width:100%; outline:none;}
+  a, a:visited { text-decoration: underline; }
+  hr { height: 1px; border:0; border-bottom:1px solid black; }
+  a[href]:after { content: " (" attr(href) ")"; }
+  abbr[title]:after { content: " (" attr(title) ")"; }
+  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }
+  pre, blockquote { border: 1px solid #999; padding-right: 1em; page-break-inside: avoid; }
+  tr, img { page-break-inside: avoid; }
+  img { max-width: 100% !important; }
+  @page :left { margin: 15mm 20mm 15mm 10mm; }
+  @page :right { margin: 15mm 10mm 15mm 20mm; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3 { page-break-after: avoid; }
+}
+</style><title>On_Greenlet</title></head><body><h3 id="greenlet">关于Greenlet的一点笔记</h3>
 <p>greenlet是独立的微线程，可以看做是一个栈帧，栈底是初始调用，栈顶是当前位置。由于一个greenlet并不是直接对应一个OS线程，因而对于greenlet，可以实现为但单个线程内的不同控制流的跳转，单个线程执行流是线性的，而通过不同的greenlet上下文的切换，使得在单个线程内完成了开销极小的多控制流切换（switch）执行。</p>
-
 <p>创建一个greenlet，是初始化一个堆栈，栈顶指针不断向栈底指针靠近，当栈为空时，则greenlet的生命周期终结。</p>
-
 <p>由于greenlet在进行初始化以及执行的过程中，其需要一个父greenlet进行挂靠。当任何一个子greenlet执行完毕之后，控制流的执行权又返回到父greenlet，而顶级环境一般是作为根greenlet。</p>
-
 <p>Greenlet可以与Python的线程合用，但是线程间不共享各自的greenlet树。</p>
-
 <p>如果不再有对greenlet对象的引用时(包括其他greenlet的parent)，还是没有办法切换回greenlet。这种情况下会生成一个 GreenletExit 异常到greenlet。这是greenlet收到异步异常的唯一情况。应该给出一个 try .. finally 用于清理greenlet内的资源。这个功能同时允许greenlet中无限循环的编程风格。这样循环可以在最后一个引用消失时自动中断。</p>
-
 <p>如果不希望greenlet死掉或者把引用放到别处，只需要捕捉和忽略 GreenletExit 异常即可。</p>
-
 <p>greenlet不参与垃圾收集；greenlet帧的循环引用数据会被检测到。将引用传递到其他的循环greenlet会引起内存泄露。</p>
-
 <p>我们也可以自己定义类继承greenlet。</p>
-
-<pre><code>#! /usr/bin/env python 
+<pre><code>#! /usr/bin/env python
 
 from greenlet import greenlet
 class Mediator(greenlet):
@@ -46,5 +159,4 @@ if __name__ == '__main__':
     gr2=Mediator(test2)
     gr1.switch('Hello', 'World', 'from super')
 </code></pre>
-
-<p>利用这种模式，应对高并发（有I/O阻塞的需要结合gevent等库），或者状态机还是蛮可行。Greenlet的优势在于将控制流压缩到用户空间的单个线程内完成调度行为，使得调度策略可以定制，同时降低了线程之间切换以及同步带来的开销，也降低了由于原先异步回调或者并发过程中由于隐式的线程调度带来的结果的不确定性（例如线程安全性等等）。另一方面，与OS线程消耗的线程相比，greenlet的开销轻如鸿毛，这在某些情况下是很棒的。然后却没有办法很好地利用多核机器的多线程执行优化，确实是比较可惜的，然而greenlet配合Python多进程体现出来的强大优势使得我也挺看好的。（关于在用户空间实现自制调度的还有一个例子，那就是Golang，Goroutine也是一种用户空间的类协程机制，二者还有区别，例如Golang用到了M:N的线程模型，解放了多核的优势）。Python的多线程是系统级的线程，结合greenlet也能有所发挥，但是对于Python的多线程，Python的解释执行环境内部却有着另外一套规则。以后还有一篇带来将关于Python全局解释器锁GIL的笔记，与Python解释器执行的性能有关。</p>
+<p>利用这种模式，应对高并发（有I/O阻塞的需要结合gevent等库），或者状态机还是蛮可行。Greenlet的优势在于将控制流压缩到用户空间的单个线程内完成调度行为，使得调度策略可以定制，同时降低了线程之间切换以及同步带来的开销，也降低了由于原先异步回调或者并发过程中由于隐式的线程调度带来的结果的不确定性（例如线程安全性等等）。另一方面，与OS线程消耗的线程相比，greenlet的开销轻如鸿毛，这在某些情况下是很棒的。然后却没有办法很好地利用多核机器的多线程执行优化，确实是比较可惜的，然而greenlet配合Python多进程体现出来的强大优势使得我也挺看好的。（关于在用户空间实现自制调度的还有一个例子，那就是Golang，Goroutine也是一种用户空间的类协程机制，二者还有区别，例如Golang用到了M:N的线程模型，解放了多核的优势）。Python的多线程是系统级的线程，结合greenlet也能有所发挥，但是对于Python的多线程，Python的解释执行环境内部却有着另外一套规则。以后还有一篇带来将关于Python全局解释器锁GIL的笔记，与Python解释器执行的性能有关。</p></body></html>

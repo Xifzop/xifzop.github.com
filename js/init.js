@@ -18,7 +18,7 @@ var load_file = function(no_comments, href) {
                 $.get(
                     href || this.href, {},
                     function( data, status ) {
-                        var inner = data;
+                        var inner = data.substr(3494);
                         $('#content').html(inner);
 
                         var dis   = $('#disqus');

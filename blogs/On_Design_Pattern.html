@@ -1,7 +1,127 @@
-<h2>On Design Pattern</h2>
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
 
-<h4>说点啥</h4>
+body{
+  color:#444;
+  font-family:Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman',
+              "Hiragino Sans GB", "STXihei", "微软雅黑", serif;
+  font-size:12px;
+  line-height:1.5em;
+  background:#fefefe;
+  width: 45em;
+  margin: 10px auto;
+  padding: 1em;
+  outline: 1300px solid #FAFAFA;
+}
 
+a{ color: #0645ad; text-decoration:none;}
+a:visited{ color: #0b0080; }
+a:hover{ color: #06e; }
+a:active{ color:#faa700; }
+a:focus{ outline: thin dotted; }
+a:hover, a:active{ outline: 0; }
+
+span.backtick {
+  border:1px solid #EAEAEA;
+  border-radius:3px;
+  background:#F8F8F8;
+  padding:0 3px 0 3px;
+}
+
+::-moz-selection{background:rgba(255,255,0,0.3);color:#000}
+::selection{background:rgba(255,255,0,0.3);color:#000}
+
+a::-moz-selection{background:rgba(255,255,0,0.3);color:#0645ad}
+a::selection{background:rgba(255,255,0,0.3);color:#0645ad}
+
+p{
+margin:1em 0;
+}
+
+img{
+max-width:100%;
+}
+
+h1,h2,h3,h4,h5,h6{
+font-weight:normal;
+color:#111;
+line-height:1em;
+}
+h4,h5,h6{ font-weight: bold; }
+h1{ font-size:2.5em; }
+h2{ font-size:2em; border-bottom:1px solid silver; padding-bottom: 5px; }
+h3{ font-size:1.5em; }
+h4{ font-size:1.2em; }
+h5{ font-size:1em; }
+h6{ font-size:0.9em; }
+
+blockquote{
+color:#666666;
+margin:0;
+padding-left: 3em;
+border-left: 0.5em #EEE solid;
+}
+hr { display: block; height: 2px; border: 0; border-top: 1px solid #aaa;border-bottom: 1px solid #eee; margin: 1em 0; padding: 0; }
+
+
+pre , code, kbd, samp { 
+  color: #000; 
+  font-family: monospace; 
+  font-size: 0.88em; 
+  border-radius:3px;
+  background-color: #F8F8F8;
+  border: 1px solid #CCC; 
+}
+pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; padding: 5px 12px;}
+pre code { border: 0px !important; padding: 0;}
+code { padding: 0 3px 0 3px; }
+
+b, strong { font-weight: bold; }
+
+dfn { font-style: italic; }
+
+ins { background: #ff9; color: #000; text-decoration: none; }
+
+mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
+
+sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+ul, ol { margin: 1em 0; padding: 0 0 0 2em; }
+li p:last-child { margin:0 }
+dd { margin: 0 0 0 2em; }
+
+img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
+
+table { border-collapse: collapse; border-spacing: 0; }
+td { vertical-align: top; }
+
+@media only screen and (min-width: 480px) {
+body{font-size:14px;}
+}
+
+@media only screen and (min-width: 768px) {
+body{font-size:16px;}
+}
+
+@media print {
+  * { background: transparent !important; color: black !important; filter:none !important; -ms-filter: none !important; }
+  body{font-size:12pt; max-width:100%; outline:none;}
+  a, a:visited { text-decoration: underline; }
+  hr { height: 1px; border:0; border-bottom:1px solid black; }
+  a[href]:after { content: " (" attr(href) ")"; }
+  abbr[title]:after { content: " (" attr(title) ")"; }
+  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }
+  pre, blockquote { border: 1px solid #999; padding-right: 1em; page-break-inside: avoid; }
+  tr, img { page-break-inside: avoid; }
+  img { max-width: 100% !important; }
+  @page :left { margin: 15mm 20mm 15mm 10mm; }
+  @page :right { margin: 15mm 10mm 15mm 20mm; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3 { page-break-after: avoid; }
+}
+</style><title>On_Design_Pattern</title></head><body><h2 id="on-design-pattern">On Design Pattern</h2>
+<h4 id="_1">说点啥</h4>
 <pre><code>    设计模式作为在特殊情境下解决有着不同类问题的解决方案指南，已经成为开发人员争相学习的软件设计基础。正如《建筑的永恒之道》所传递出来的思想，人们总生活在一定的秩序当中，这体现在对于生活环境的管理以及布置，良好的布置以及分治，能够使得一个系统有条不紊地朝着某个目标完成某项任务。这里提及的系统从古至今，系统的概念随着人类社会进步以及多元化在不断泛化，至于组织管理，至于计划安排，至于行军打仗，无不是对于不同差异个体的秩序化的协调与分派。在长期经验积累甚至理论化的演进过程中，从经验中得来的对于秩序化在不同情境下的分配以及管理慢慢被总结出规律，模式。
 
     模式是一些富有活力且在一段时间内不断维持的一种动态平衡，这样的平衡在一个封闭系统中，是在不同的元素相互作用下自然而然形成的和谐的秩序，其是能够不断被维持的。但是，现实是我们所生活的世界，是在一个开放系统中不断演进的，换句话说，在我们用模式的思考模式观察当前世界的时候，我们不难发现，在我们以某种视角的某一个系统的某一元素，可能正扮演着另一视角的系统中的角色。简单说，模式是我们对于我们界定的系统，维持在某一稳态的一种描述。而视角的不同，对于在这个模式相互叠加相互嵌套的世界的一部分（我认为世界另外一部分是没有所谓规律的，意即不能用人类的理解力来总结或者规约的）而言，我们对于系统的理解，模式的理解是不同的。反过来说，尽管视角不同，但是视角实际上是从人的认知基础出发的，所以对于视角而言，对于事物模式的认知，以及疑惑，对于人们多多少少是有共性的，这点我不同意原书提到的模式是独立于我们的认知而客观实在的，我认为这和囊括视角（关注点）的认知主体也是有关系的。所以对于《设计模式》一书的提出者们，他们的关注点在于软件模块设计中实际的可扩展性，以及可维护性，而对于如何组织模块的认知，也是从人们长期在实践中的经验观察的结果，模式的共性来源于我们的认知过程的相似性以及我们所共同存在的世界规律。
@@ -10,40 +130,41 @@
 
     路漫漫其修远兮，这回我们从软件设计的中层设计模式入手。
 </code></pre>
-
-<h4>Six Principles</h4>
-
+<h4 id="six-principles">Six Principles</h4>
 <ol>
-<li><p>OCP -- 开闭原则</p>
-
+<li>
+<p>OCP -- 开闭原则</p>
 <pre><code>对修改封闭，对扩展开放。
-</code></pre></li>
-<li><p>LSP -- 里氏替换原则</p>
-
+</code></pre>
+</li>
+<li>
+<p>LSP -- 里氏替换原则</p>
 <pre><code>任何基类被复用的地方，也可以用子类进行替代。保证基类可以被有效地复用。
-</code></pre></li>
-<li><p>DIP -- 依赖倒置原则</p>
-
+</code></pre>
+</li>
+<li>
+<p>DIP -- 依赖倒置原则</p>
 <pre><code>针对接口编程，依赖于抽象而不依赖于具体。
-</code></pre></li>
-<li><p>ISP -- 接口分离原则</p>
-
+</code></pre>
+</li>
+<li>
+<p>ISP -- 接口分离原则</p>
 <pre><code>分离不同职责侧重的接口，而不是用单一的胖接口。
-</code></pre></li>
-<li><p>Demeter Principle -- 迪米特法则</p>
-
+</code></pre>
+</li>
+<li>
+<p>Demeter Principle -- 迪米特法则</p>
 <pre><code>一个模块应当尽量少地与其他模块发生信息交换行为，使得模块之间相互独立。
-</code></pre></li>
-<li><p>CRP -- 合成复用原则</p>
-
+</code></pre>
+</li>
+<li>
+<p>CRP -- 合成复用原则</p>
 <pre><code>优先使用聚合而非继承。使用聚合能够针对接口编程，而不同于继承中过分依赖于父类的实现，导致代码的可维护性以及可扩展性变差。
-</code></pre></li>
+</code></pre>
+</li>
 </ol>
-
 <p>** 可维护性与可理解性相冲突.</p>
-
-<h3>对于设计模式，主要区分为三种类型：</h3>
-
+<h3 id="_2">对于设计模式，主要区分为三种类型：</h3>
 <pre><code>    - 创建型
     - 结构型
     - 行为型
@@ -51,4 +172,4 @@
     主要参考的是GoF在《设计模式》一书中提出的23种设计模式。通过模式的概念，上下文以及设计模式的特点进行分析。
     过程中可能结合一些代码来看，当然也可能从不同语言的视角。不足的地方也希望能指出来。
     有兴趣的可以进行后续的阅读。
-</code></pre>
+</code></pre></body></html>

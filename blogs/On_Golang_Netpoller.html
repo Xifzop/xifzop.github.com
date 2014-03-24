@@ -1,43 +1,154 @@
-<p>###Golang的netpoller(网络轮询器)</p>
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
 
+body{
+  color:#444;
+  font-family:Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman',
+              "Hiragino Sans GB", "STXihei", "微软雅黑", serif;
+  font-size:12px;
+  line-height:1.5em;
+  background:#fefefe;
+  width: 45em;
+  margin: 10px auto;
+  padding: 1em;
+  outline: 1300px solid #FAFAFA;
+}
+
+a{ color: #0645ad; text-decoration:none;}
+a:visited{ color: #0b0080; }
+a:hover{ color: #06e; }
+a:active{ color:#faa700; }
+a:focus{ outline: thin dotted; }
+a:hover, a:active{ outline: 0; }
+
+span.backtick {
+  border:1px solid #EAEAEA;
+  border-radius:3px;
+  background:#F8F8F8;
+  padding:0 3px 0 3px;
+}
+
+::-moz-selection{background:rgba(255,255,0,0.3);color:#000}
+::selection{background:rgba(255,255,0,0.3);color:#000}
+
+a::-moz-selection{background:rgba(255,255,0,0.3);color:#0645ad}
+a::selection{background:rgba(255,255,0,0.3);color:#0645ad}
+
+p{
+margin:1em 0;
+}
+
+img{
+max-width:100%;
+}
+
+h1,h2,h3,h4,h5,h6{
+font-weight:normal;
+color:#111;
+line-height:1em;
+}
+h4,h5,h6{ font-weight: bold; }
+h1{ font-size:2.5em; }
+h2{ font-size:2em; border-bottom:1px solid silver; padding-bottom: 5px; }
+h3{ font-size:1.5em; }
+h4{ font-size:1.2em; }
+h5{ font-size:1em; }
+h6{ font-size:0.9em; }
+
+blockquote{
+color:#666666;
+margin:0;
+padding-left: 3em;
+border-left: 0.5em #EEE solid;
+}
+hr { display: block; height: 2px; border: 0; border-top: 1px solid #aaa;border-bottom: 1px solid #eee; margin: 1em 0; padding: 0; }
+
+
+pre , code, kbd, samp { 
+  color: #000; 
+  font-family: monospace; 
+  font-size: 0.88em; 
+  border-radius:3px;
+  background-color: #F8F8F8;
+  border: 1px solid #CCC; 
+}
+pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; padding: 5px 12px;}
+pre code { border: 0px !important; padding: 0;}
+code { padding: 0 3px 0 3px; }
+
+b, strong { font-weight: bold; }
+
+dfn { font-style: italic; }
+
+ins { background: #ff9; color: #000; text-decoration: none; }
+
+mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
+
+sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+ul, ol { margin: 1em 0; padding: 0 0 0 2em; }
+li p:last-child { margin:0 }
+dd { margin: 0 0 0 2em; }
+
+img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
+
+table { border-collapse: collapse; border-spacing: 0; }
+td { vertical-align: top; }
+
+@media only screen and (min-width: 480px) {
+body{font-size:14px;}
+}
+
+@media only screen and (min-width: 768px) {
+body{font-size:16px;}
+}
+
+@media print {
+  * { background: transparent !important; color: black !important; filter:none !important; -ms-filter: none !important; }
+  body{font-size:12pt; max-width:100%; outline:none;}
+  a, a:visited { text-decoration: underline; }
+  hr { height: 1px; border:0; border-bottom:1px solid black; }
+  a[href]:after { content: " (" attr(href) ")"; }
+  abbr[title]:after { content: " (" attr(title) ")"; }
+  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }
+  pre, blockquote { border: 1px solid #999; padding-right: 1em; page-break-inside: avoid; }
+  tr, img { page-break-inside: avoid; }
+  img { max-width: 100% !important; }
+  @page :left { margin: 15mm 20mm 15mm 10mm; }
+  @page :right { margin: 15mm 10mm 15mm 20mm; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3 { page-break-after: avoid; }
+}
+</style><title>On_Golang_Netpoller</title></head><body><h3 id="golangnetpoller">Golang的netpoller(网络轮询器)</h3>
 <p>作者: <strong>Daniel Morsing</strong></p>
-
 <p>译者: Xifzop</p>
-
-<p>#####简介：</p>
-
+<h5 id="_1">简介：</h5>
 <blockquote>
-  <p>闲下来了，平时要么就有更重要的事情去做，更新博客的时间不多。这回再推出一篇与Golang的运行时相关的博客，这次我将谈谈Golang如何处理网络I/O。</p>
+<p>闲下来了，平时要么就有更重要的事情去做，更新博客的时间不多。这回再推出一篇与Golang的运行时相关的博客，这次我将谈谈Golang如何处理网络I/O。</p>
 </blockquote>
-
-<p>#####阻塞：</p>
-
+<h5 id="_2">阻塞：</h5>
 <p>在Golang中，所有的I/O都是阻塞型的。Golang的生态系统是建立在这样理念基础上的，你写出一个阻塞型的执行接口，并且通过Goroutine的调度机制以及通道来处理并发，而不是采用异步回调策略(callbacks &amp; futures)。一个例子是在“net/http”包中的HTTP服务器：</p>
-
 <blockquote>
-  <p>不论何时接受并建立起一个网络连接，服务器会直接创建一个Goroutine全程接管并处理该连接上的请求。</p>
+<p>不论何时接受并建立起一个网络连接，服务器会直接创建一个Goroutine全程接管并处理该连接上的请求。</p>
 </blockquote>
-
 <p>这种构建方式意味着请求处理器可以以一种很直观的方式表述（编程）出来，先这么做，然后那么做（个人批注：这是处理网络连接请求的两种思想，一种是多线程多任务地执行请求处理，而另种是通过回调以及事件驱动机制实现请求处理），一切的先后顺序井井有条。但不幸地是，利用OS提供的阻塞I/O的机制，并不适合我们所需要构建的阻塞性I/O接口的需求。</p>
-
 <p>在我之前一篇与Golang的Runtime相关的博文当中，我提到了Goroutine的调度机制当中，如何处理系统调用。对于一个阻塞型的系统调用，我们需要一个专门为之阻塞的OS内部线程。如果将我们的阻塞型I/O接口建立在OS的阻塞线程基础上，那么每当有客户端的请求需要使用系统调用的时候，我们就得新建一个线程。这在当有10000个客户端请求处理线程同时存在时，开销将是惊人的，每个都需要等待相应的系统调用执行完返回。</p>
-
 <p>Golang利用了操作系统提供的异步接口，绕过这个问题，只阻塞处理I/O的Goroutines。</p>
-
-<p>#####Netpoller：</p>
-
+<h5 id="netpoller">Netpoller：</h5>
 <p>将异步I/O转化为阻塞I/O的是netpoller，其在自己单独的一个线程当中，等待请求处理net I/O的Goroutine发送来的事件。Netpoller利用不同OS提供的接口，完成对一组网络套接字的轮询。例如：</p>
-
 <ul>
-<li><p>Linux上，利用的是epoll</p></li>
-<li><p>在BSD系统或者Darwin上，利用的是kqueue</p></li>
-<li><p>在Windows系统上，利用的是IoCompletionPort</p></li>
+<li>
+<p>Linux上，利用的是epoll</p>
+</li>
+<li>
+<p>在BSD系统或者Darwin上，利用的是kqueue</p>
+</li>
+<li>
+<p>在Windows系统上，利用的是IoCompletionPort</p>
+</li>
 </ul>
-
 <p>这些接口的共同之处在于：它们为用户空间提供了对网络I/O状态进行高效轮询的方式。</p>
-
 <p>在Golang中，当建立并且接口一个网络连接之后，返回的文件描述符被设置为非阻塞模式。也就说，如果你打算在该描述符上进行I/O操作，但是该文件描述符却没有就绪，其会返回一个错误码表明未就绪。而一个Goroutine要对一个连接进行读写时，操作会被执行。中间如果其接受到该错误码，其就会让netpoller在下一次该网络I/O就绪时，告知该Goroutine继续执行；同时，该Goroutine会被挂起，Processor（Golang Runtime中的Processor）会调度进另外一个线程继续执行。</p>
-
 <p>当netpoller接收到来自OS的通知 ---- 某个特定的文件描述符处于I/O处理的就绪状态，其会检查自身的内部数据结构，查看是否有Goroutine阻塞在该文件描述符上。如果存在这样的Goroutine，并唤醒它(们)。此时，该Goroutine可以重复上一次I/O失败的操作，并继续执行。</p>
-
-<p>你也可以认为这是利用Unix的select与poll完成的系统调用，那也没错。但是与检查函数指针与包含一堆状态变量的结构体相比，netpoller检查的是一个个的Goroutine。这样的管理使得你可以尽量少地与那些状态变量打交道，免去传统的Unix的重复检查等繁琐的操作。</p>
+<p>你也可以认为这是利用Unix的select与poll完成的系统调用，那也没错。但是与检查函数指针与包含一堆状态变量的结构体相比，netpoller检查的是一个个的Goroutine。这样的管理使得你可以尽量少地与那些状态变量打交道，免去传统的Unix的重复检查等繁琐的操作。</p></body></html>

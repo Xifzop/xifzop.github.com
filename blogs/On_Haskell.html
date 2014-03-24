@@ -1,37 +1,151 @@
-<h2>##学习Haskell</h2>
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
 
+body{
+  color:#444;
+  font-family:Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman',
+              "Hiragino Sans GB", "STXihei", "微软雅黑", serif;
+  font-size:12px;
+  line-height:1.5em;
+  background:#fefefe;
+  width: 45em;
+  margin: 10px auto;
+  padding: 1em;
+  outline: 1300px solid #FAFAFA;
+}
+
+a{ color: #0645ad; text-decoration:none;}
+a:visited{ color: #0b0080; }
+a:hover{ color: #06e; }
+a:active{ color:#faa700; }
+a:focus{ outline: thin dotted; }
+a:hover, a:active{ outline: 0; }
+
+span.backtick {
+  border:1px solid #EAEAEA;
+  border-radius:3px;
+  background:#F8F8F8;
+  padding:0 3px 0 3px;
+}
+
+::-moz-selection{background:rgba(255,255,0,0.3);color:#000}
+::selection{background:rgba(255,255,0,0.3);color:#000}
+
+a::-moz-selection{background:rgba(255,255,0,0.3);color:#0645ad}
+a::selection{background:rgba(255,255,0,0.3);color:#0645ad}
+
+p{
+margin:1em 0;
+}
+
+img{
+max-width:100%;
+}
+
+h1,h2,h3,h4,h5,h6{
+font-weight:normal;
+color:#111;
+line-height:1em;
+}
+h4,h5,h6{ font-weight: bold; }
+h1{ font-size:2.5em; }
+h2{ font-size:2em; border-bottom:1px solid silver; padding-bottom: 5px; }
+h3{ font-size:1.5em; }
+h4{ font-size:1.2em; }
+h5{ font-size:1em; }
+h6{ font-size:0.9em; }
+
+blockquote{
+color:#666666;
+margin:0;
+padding-left: 3em;
+border-left: 0.5em #EEE solid;
+}
+hr { display: block; height: 2px; border: 0; border-top: 1px solid #aaa;border-bottom: 1px solid #eee; margin: 1em 0; padding: 0; }
+
+
+pre , code, kbd, samp { 
+  color: #000; 
+  font-family: monospace; 
+  font-size: 0.88em; 
+  border-radius:3px;
+  background-color: #F8F8F8;
+  border: 1px solid #CCC; 
+}
+pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; padding: 5px 12px;}
+pre code { border: 0px !important; padding: 0;}
+code { padding: 0 3px 0 3px; }
+
+b, strong { font-weight: bold; }
+
+dfn { font-style: italic; }
+
+ins { background: #ff9; color: #000; text-decoration: none; }
+
+mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
+
+sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+ul, ol { margin: 1em 0; padding: 0 0 0 2em; }
+li p:last-child { margin:0 }
+dd { margin: 0 0 0 2em; }
+
+img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
+
+table { border-collapse: collapse; border-spacing: 0; }
+td { vertical-align: top; }
+
+@media only screen and (min-width: 480px) {
+body{font-size:14px;}
+}
+
+@media only screen and (min-width: 768px) {
+body{font-size:16px;}
+}
+
+@media print {
+  * { background: transparent !important; color: black !important; filter:none !important; -ms-filter: none !important; }
+  body{font-size:12pt; max-width:100%; outline:none;}
+  a, a:visited { text-decoration: underline; }
+  hr { height: 1px; border:0; border-bottom:1px solid black; }
+  a[href]:after { content: " (" attr(href) ")"; }
+  abbr[title]:after { content: " (" attr(title) ")"; }
+  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }
+  pre, blockquote { border: 1px solid #999; padding-right: 1em; page-break-inside: avoid; }
+  tr, img { page-break-inside: avoid; }
+  img { max-width: 100% !important; }
+  @page :left { margin: 15mm 20mm 15mm 10mm; }
+  @page :right { margin: 15mm 10mm 15mm 20mm; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3 { page-break-after: avoid; }
+}
+</style><title>On_Haskell</title></head><body><h2 id="haskell">学习Haskell</h2>
+<hr />
 <p>Haskell是一门纯函数式编程语言，同时Haskell也是一门静态类型语言。严格的函数式语言都是有严密的数学推导作为保障的，但这并不意味着所有的函数式语言都是严格类型的。松散的类型系统或者动态类型也是有的，比如Lisp的一些方言。当然这里说的是Haskell，那就来说说静态类型语言。静态类型语言是在编译阶段前就检查类型使用是否合法。从而避免由于动态环境中执行的不确定性而给程序带来灭顶之灾。而对于生产效率而言，摆脱使用变量类型声明的限制，可以让开发人员将更多的精力集中在逻辑与控制上，所以对于动态类型与静态类型一个很大的争议就在于程序执行正确保障与开发效率的权衡上。传统的静态类型的语言总是要求程序员在每一处都应当声明相应的类型。而对有着严格的推演规则的类型系统，部分的类型推断可以交由编译器完成，程序员只在可能产生歧义或者提升效率的地方增添类型提示，给编译器提供类型信息就够了。这是我最早在接触定理证明Coq以及OCaml的时候才了解的。这样的方式相信在将来也将慢慢发展起来。</p>
-
 <p>简单地开始学习Haskell，参考的是《Haskell趣学指南》一书，也有个在线的<a href="http://fleurer-lee.com/lyah/chapters.htm">翻译版本</a>可供参考，需要的是最基本的交互式环境编程以及编译器的使用。这里我结合Sublime text 2的SublimeHaskell插件，完成最基本的配置。在学习过程中间，如果为了配置一些很少或者用不到的东西，我认为那样的时间花费总是不必要的。[有没有一点惰性求值的赶脚? (笑 ]</p>
-
 <p>Mac下通过
     ~$ sudo port install ghc</p>
-
 <p>就能完成Haskell编译器的下载，<a href="http://en.wikipedia.org/wiki/Glasgow_Haskell_Compiler">Glasgow Haskell Compiler</a>.</p>
-
 <p>在终端下能够输入ghci的交互式编程。
 一个简单的HelloWorld.hs</p>
-
 <blockquote>
-  <p>main :: IO()</p>
-  
-  <p>main = putStrLn "Hello, world!"
-    # -> Hello world!</p>
+<p>main :: IO()</p>
+<p>main = putStrLn "Hello, world!"
+  # -&gt; Hello world!</p>
 </blockquote>
-
 <p>在Haskell中，由于其是纯函数式编程，因而其是引用透明的，也就是一个函数不会对某个变量产生副作用，而只要输入值不变，那么完成操作的返回的值也不变。</p>
-
 <p>基本的数值型计算,</p>
-
 <ul>
-<li><p>+, -, *, /, ( % for mod does not exist ), mod</p></li>
-<li><p>==, /= (not equal)</p></li>
+<li>
+<p>+, -, *, /, ( % for mod does not exist ), mod</p>
+</li>
+<li>
+<p>==, /= (not equal)</p>
+</li>
 </ul>
-
 <p>Bool（True与False）的操作围绕 &amp;&amp; || 还有 not组合。</p>
-
 <p>在Haskell编程中要求严格的操作符类型匹配，否则就会报错。例如，</p>
-
 <pre><code>ghci &gt; 1 + "1"
 
 interactive&gt;:12:1:
@@ -42,110 +156,74 @@ In the first argument of `(==)', namely `1'
 In the expression: 1 == '1'
 In an equation for `it': it = 1 == '1'
 </code></pre>
-
 <p>其实在编程语言的语义分析以及程序正确性验证（并非一般所提及的测试，而是将程序的执行转化为定理证明，通过严密的数学逻辑进行推导）的过程当中，类型分析以及匹配是很关键的一块。这对于大部分非弱类型的语言来说，是很关键的。比如，利用Java编程的人总是在抱怨对于null的处理，很多别的编程语言中也是如此。在很多编程语言中空值或者空对象，总是被当作通用类型或者特殊值来处理。这简化了设计，但是也给程序正确性验证以及编译器进行类型推导、排错带来更大的难度。当然，也有编程语言采用另外一种设计思路，也就是迫使程序员在定义某一类型的同时，将该类型可能的形式进行一个枚举（比如nullType与非nullType），这样的话编译器在进行类型验证的过程当中就可以进行一个模式匹配，或者说类型定义的匹配，而程序员在处理某一类型的一般性代码时，编译器会要求程序员同时处理可能潜在的case。这样的程序正确性能够得到保证的同时，也利于错误的排查。但是目前的通用语言里面这样的不多，比如OCaml这一类的ML函数式编程语言。以及Haskell。</p>
-
 <p>一般通过let或者直接赋值的方式定义一个常量，没有给出类型提示时Haskell会自动进行类型推导。</p>
-
 <p>先看看递增函数succ。</p>
-
 <pre><code>ghci &gt; succ 2 # -&gt; 3
 
 ghci &gt; min 2 3 # -&gt; 2
 
 ghci &gt; max 2 3 # -&gt; 3
 </code></pre>
-
 <p>Haskell中简单定义函数，
 函数名字(首字母不能大写，可以有')与函数体：</p>
-
 <pre><code>ghci &gt; doubleTimes x = x + x
 
 ghci &gt; doubleTimes 2 # -&gt; 4
 </code></pre>
-
 <p>也可以采用 if-then-else的结构。</p>
-
 <p>与许多函数式语言一样，为了对数据有统一性的结构化操作，在Haskell中通用数据类型是List ---- &lt;表&gt;.</p>
-
 <p>List的通用操作:</p>
-
 <pre><code>list1 ++ list2
 
 element : list3
 </code></pre>
-
 <p>对于List而言，++意味着对于前面的列表进行一个遍历，如果插入短字符串，那么通过第二种方式加入新元素将会是更好的选择，字符串也类似于List。例如：</p>
-
 <pre><code>"foo bar ... n" ++ "here"
 </code></pre>
-
 <p>等价于</p>
-
 <pre><code>'f':'o':'o':....:"here"
 </code></pre>
-
 <p>最后一个必须是一个List结构。</p>
-
 <p>正如之前提到的，List在定义的过程当中，是递归定义的(以下是简写，了解巴库斯范式的应该不难理解)。</p>
-
 <pre><code>List :=  []
         | element:List
 </code></pre>
-
 <p>通过!!符号取得某一索引处的值。例如，</p>
-
 <pre><code>[6,4,7,2,3,8] !! 3 # -&gt; 2
 </code></pre>
-
 <p>head返回一个List的头部，也就是List的首个元素。</p>
-
-<pre><code>ghci &gt; head [5,4,3,2,1]  
+<pre><code>ghci &gt; head [5,4,3,2,1]
 
 5
 </code></pre>
-
 <p>tail返回一个LIst的尾部，也就是List除去头部之后的部分。</p>
-
 <pre><code>ghci &gt; tail [5,4,3,2,1]   
 ghci &gt; [4,3,2,1]
 </code></pre>
-
 <p>last返回一个LIst的最后一个元素。</p>
-
 <pre><code>ghci &gt; last [5,4,3,2,1]   
 ghci &gt; 1
 </code></pre>
-
 <p>init返回一个LIst出去最后一个元素的部分。</p>
-
 <p>ghci &gt; init [5,4,3,2,1] <br />
   ghci &gt;[5,4,3,2]  </p>
-
 <p>从空List需要谨慎。</p>
-
 <p>length返回一个List的长度。</p>
-
 <pre><code>ghci &gt; length [5,4,3,2,1]   
 ghci &gt; 5
 </code></pre>
-
 <p>null检查一个List是否为空。如果是，则返回True，否则返回False。应当避免使用xs==[]之类的语句来判断List是否为空，使用null会更好。</p>
-
 <pre><code>ghci &gt; null [1,2,3]   
 False   
 ghci &gt; null []   
 True
 </code></pre>
-
 <p>reverse将一个List反转</p>
-
 <pre><code>ghci &gt; reverse [5,4,3,2,1]   
 [1,2,3,4,5]
 </code></pre>
-
 <p>take返回一个List的前几个元素，看：</p>
-
 <pre><code>ghci &gt; take 3 [5,4,3,2,1]   
 [5,4,3]   
 ghci &gt; take 1 [3,9,3]   
@@ -153,19 +231,14 @@ ghci &gt; take 1 [3,9,3]
 ghci &gt; take 5 [1,2]   
 [1,2]
 </code></pre>
-
 <p>drop和take作用类似，但是drop有点不一样，返回的是被删除之后的几个元素的列表。</p>
-
 <p>maximum返回一个List中最大的那个元素。miniimun返回最小的。</p>
-
 <pre><code>ghci &gt; minimum [8,4,2,1,5,6]   
 1   
 ghci &gt; maximum [1,9,2,3,4]   
 9
 </code></pre>
-
 <p>sum返回一个List中所有元素的和。product返回一个List中所有元素的积。</p>
-
 <pre><code>ghci &gt; sum [5,2,1,6,3,2,5,7]   
 31   
 ghci &gt; product [6,2,1,2]   
@@ -173,68 +246,45 @@ ghci &gt; product [6,2,1,2]
 ghci &gt; product [1,2,5,6,7,9,2,0]   
 0
 </code></pre>
-
 <p>elem判断一个元素是否在包含于一个List，通常以中缀函数的形式调用它。</p>
-
 <pre><code>ghci &gt; 4 \`elem\` [3,4,5,6]   
 True   
 ghci &gt; 10 \`elem\` [3,4,5,6]   
 False
 </code></pre>
-
 <p>List的Range功能。对于一个链表，需要的只是定义其</p>
-
 <blockquote>
-  <p>[init, init + step<em>length ... last</em>val]</p>
+<p>[init, init + step_length ... last_val]</p>
 </blockquote>
-
 <ul>
 <li>注意，在range中避免使用浮点数。</li>
 </ul>
-
 <p>同样，如果对于列表的末值不确定，可以采用无限列表。例如：</p>
-
 <pre><code>[1,2 ...]
 take 100 [1,2 ...] # -&gt; [1,2,3,4........., 100]
 </code></pre>
-
 <p>这里就采用了惰性求值的模式，无限不意味着要求出来，可以确定性结果出来了在决定求值多少。</p>
-
 <p>cycle函数返回一个无限的单次循环List</p>
-
 <pre><code>ghci &gt; take 10 (cycle [1,2,3])   
 [1,2,3,1,2,3,1,2,3,1]
 </code></pre>
-
 <p>repeat则是返回重复的无限列表。duplicate返回包含某个元素指定次数的列表。</p>
-
 <p>定义某个集合：</p>
-
 <pre><code>[ 2 * x | x &lt;- [1,2..10], x * 2 &gt;= 12 ]
 </code></pre>
-
 <p>也就是这样的格式：</p>
-
 <blockquote>
-  <p>[元素计算值 | 列表+，条件+]</p>
+<p>[元素计算值 | 列表+，条件+]</p>
 </blockquote>
-
 <p>List中这样的计算结构可以在嵌套的List上面使用。</p>
-
 <p>对于元组Tuple的概念，在一些其他的编程语言中也有出现。比如Python中的元组，Python中的tuple类型不能修改其某一位置上的值，tuple与List之间可以进行自由地转换，同时Python也允许程序员使用混合类型的tuple。然而对于Haskell而言，毕竟这是由一群有学究范的人研发出来的，所以从程序正确性方面考虑，编译器在编译前就应当提供完善的程序执行保证，特别是在类型上的。所以在Haskell中的Tuple更加严格。对于某一List中的Tuple，必须是拥有同样子类型序列，同时拥有相同数目成员的，否则都会报错（通过Haskell内置的Type Inference）。这强迫程序员在进行编程过程当中坚守一致性的数据结构，更好地写出健壮的代码。* Tuple不能只有单值。</p>
-
 <pre><code>fst ("foo", "bar") # -&gt; foo
 snd ("foo", "bar") # -&gt; bar
 </code></pre>
-
 <p>通过zip函数，可以将两个List进行拼合，每个子元素的类型即为Tuple。</p>
-
 <pre><code>zip [1,2,3] ["one", "two", "three"] 
 # -&gt; [(1,"one"), (2, "two"), (3, "three")]
 </code></pre>
-
 <p>对于更细的一些操作指南可以参考Haskell的API文档。</p>
-
 <p>* 这里提供一个“搜索引擎”链接 ---- <a href="http://www.haskell.org/hoogle/">http://www.haskell.org/hoogle/</a> 用于搜索Haskell下的大部分API，很是方便。</p>
-
-<p>下一篇继续初步学习Haskell中的类型系统。</p>
+<p>下一篇继续初步学习Haskell中的类型系统。</p></body></html>
